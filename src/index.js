@@ -2,15 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import { RecoilRoot } from 'recoil'
-import customTheme from './theme'
-import { ThemeProvider } from '@chakra-ui/core'
+import { ThemeProvider, CSSReset, theme } from '@chakra-ui/core'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 ReactDOM.render(
-  <RecoilRoot>
-    <ThemeProvider theme={customTheme}>
-      <App/>
-    </ThemeProvider>
-  </RecoilRoot>,
+  <Router>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <CSSReset />
+        <App />
+      </ThemeProvider>
+    </RecoilRoot>
+  </Router>,
   document.getElementById('root')
 )
 

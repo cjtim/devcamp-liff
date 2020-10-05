@@ -10,11 +10,12 @@
     "emotion-theming": "^10.0.27",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "2.1.1",
     "recoil": "^0.0.13"
   },
   "scripts": {
-    "dev": "BROWSER=none react-scripts start",
+    "dev": "BROWSER=none HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
