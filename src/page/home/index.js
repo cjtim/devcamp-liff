@@ -13,6 +13,7 @@ function Home() {
         liff.login()
       }
       setlineToken(liff.getAccessToken())
+      console.log(liff.getProfile())
     }
     liffLogin()
   }, [])
