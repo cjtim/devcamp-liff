@@ -12,10 +12,13 @@ function Home() {
       if (!liff.isLoggedIn()) {
         liff.login()
       }
+      await liff.ready
       setlineToken(liff.getAccessToken())
-      console.log(liff.getProfile())
+      console.log(liff.getAccessToken())
+      console.log(await liff.getProfile())
     }
     liffLogin()
+    
   }, [])
   return (
     <main>
