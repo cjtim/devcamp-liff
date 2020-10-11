@@ -1,15 +1,12 @@
-import React from 'react'
+// eslint-disable-next-line
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-const backendInstance = axios.create({
-  url: 'https://restaurant-helper-omise-nwbwsoebza-an.a.run.app/'
-})
-export default function MenuOrder() {
+import LoadingAnimation from '../../component/loadingAnimation'
+
+function MenuOrder() {
+  const [isLoading, setisLoading] = useState(true)
   const { OmiseCard } = window
-  OmiseCard.configure({
-    publicKey: 'pkey_test_5lhqfzgfnn0fhy5zo3g'
-  })
   async function onClickPay() {
-    // event.preventDefault()
     OmiseCard.open({
       amount: 12345,
       currency: 'THB',
@@ -24,21 +21,30 @@ export default function MenuOrder() {
         'promptpay'
       ],
       onCreateTokenSuccess: async nonce => {
+        setisLoading(true)
         console.log(nonce)
-        const paymentUrl = await backendInstance.post(
+        const paymentUrl = await axios.post(
           'https://restaurant-helper-omise-nwbwsoebza-an.a.run.app/payment/charges/create',
           {
             source: nonce
           }
         )
-        document.write('Please wait redirecting.....')
         window.location.href = paymentUrl.data
+      },
+      onFormClosed: async () => {
+        setisLoading(true)
+        window.location.reload()
       }
     })
   }
-  onClickPay()
-  return (
-    <>
-    </>
-  )
+  useEffect(() => {
+    OmiseCard.configure({
+      publicKey: process.env.REACT_APP_OMISE_PUB_KEY
+    })
+    onClickPay()
+    setisLoading(false)
+  }, [])
+  if (isLoading) return <LoadingAnimation />
+  return <></>
 }
+export default MenuOrder

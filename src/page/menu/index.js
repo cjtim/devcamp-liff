@@ -6,7 +6,9 @@ export default function MenuRoute() {
     const match = useRouteMatch();
     return (
         <Switch>
-            <Route path={match.path + "/1"} children={MenuOrder}/>
+            <Route path={match.path + "/1"}>
+                <MenuOrder/>
+            </Route>
         </Switch>
     )
 }
