@@ -24,7 +24,8 @@ function MenuOrder() {
         const paymentUrl = await backendInstance.post(
           '/payment/charges/create',
           {
-            source: nonce
+            source: nonce,
+            amount: 20000
           }
         )
         window.location.href = paymentUrl.data
