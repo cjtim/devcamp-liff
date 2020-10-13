@@ -42,6 +42,10 @@ function MenuOrder() {
         publicKey: process.env.REACT_APP_OMISE_PUB_KEY
       })
       await liff.init({ liffId: process.env.REACT_APP_LIFF_ID })
+      if (!liff.isLoggedIn()) {
+        liff.login()
+      }
+      await liff.ready
       backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
       console.log(liff.getAccessToken())
       console.log(await liff.getProfile())
