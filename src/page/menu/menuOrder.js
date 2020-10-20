@@ -8,9 +8,12 @@ const backendInstance = axios.create({
 })
 function MenuOrder() {
   const [isLoading, setisLoading] = useState(true)
-  const [amount, setAmount] = useState(12345)
-  const [restaurantName, setrestaurantName] = useState("Restaurant1")
-  const [restaurantIcon, setRestaurantIcon] = useState('https://cdn.omise.co/assets/dashboard/images/omise-logo.png')
+  const amount = 12345
+  // const [amount, setAmount] = useState(12345)
+  const restaurantName = "Restaurant1"
+  // const [restaurantName, setrestaurantName] = useState("Restaurant1")
+  const restaurantIcon = 'https://cdn.omise.co/assets/dashboard/images/omise-logo.png'
+  // const [restaurantIcon, setRestaurantIcon] = useState('https://cdn.omise.co/assets/dashboard/images/omise-logo.png')
   const { OmiseCard } = window
 
   async function onClickPay() {

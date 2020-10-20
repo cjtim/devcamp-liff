@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { lineState } from '../../recoil'
 import { Input, Flex, Button, Link } from '@chakra-ui/core'
 import { useRecoilState } from 'recoil'
@@ -27,6 +27,7 @@ function Home() {
   }, [])
   return (
     <main>
+      {lineToken || ''}
       <Flex justify="center" py={4}>
         <Input
           width="80%"
@@ -34,6 +35,7 @@ function Home() {
           placeholder="Amount"
           size="lg"
           defaultValue={amount}
+          onChange={(e) => setAmount(e.target.value)}
         />
       </Flex>
       {/* Omise */}
