@@ -8,15 +8,19 @@ const backendInstance = axios.create({
 })
 function MenuOrder() {
   const [isLoading, setisLoading] = useState(true)
+  const [amount, setAmount] = useState(12345)
+  const [restaurantName, setrestaurantName] = useState("Restaurant1")
+  const [restaurantIcon, setRestaurantIcon] = useState('https://cdn.omise.co/assets/dashboard/images/omise-logo.png')
   const { OmiseCard } = window
+
   async function onClickPay() {
     setisLoading(false)
     OmiseCard.open({
-      amount: 12345,
+      amount: amount,
       currency: 'THB',
       defaultPaymentMethod: 'internet_banking',
-      image: 'https://cdn.omise.co/assets/dashboard/images/omise-logo.png',
-      frameLabel: 'ร้านอาหารที่1',
+      image: restaurantIcon,
+      frameLabel: restaurantName,
       otherPaymentMethods: ['credit_card', 'truemoney', 'alipay'],
       onCreateTokenSuccess: async nonce => {
         setisLoading(true)
@@ -28,7 +32,7 @@ function MenuOrder() {
             amount: 20000
           }
         )
-        window.location.href = paymentUrl.data
+        window.open(paymentUrl.data)
       },
       onFormClosed: async () => {
         setisLoading(true)
