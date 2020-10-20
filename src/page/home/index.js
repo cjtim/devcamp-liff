@@ -47,15 +47,14 @@ function Home() {
       {/* SCB */}
       <Flex justify="center" py={4}>
           <Button variantColor="green" onClick={async() => {
-            window.open(
-              await backendInstance.post('/payment/scb', {
+            const payload = await backendInstance.post('/payment/scb', {
               amount: amount
             }, {
               headers: {
                 authorization: `Bearer ${liff.getAccessToken()}`
               }
             })
-            )
+            window.open(payload.data)
           }}>Pay with SCB</Button>
       </Flex>
 
