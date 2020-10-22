@@ -13,7 +13,7 @@ function App() {
   return (
     <Switch>
       <Route exact path="/" component={Home}/>
-      <Route exact path="/pay/:orderid" component={RedirectTo}/>
+      <Route exact path="/redirect" component={RedirectTo}/>
       <Route exact path="/logout" component={Logout}/>
       <Route exact path="/restaurant/:id"/>
       <Route path="/menu" component={MenuRoute}/>

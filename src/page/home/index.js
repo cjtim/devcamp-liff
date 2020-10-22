@@ -54,7 +54,7 @@ function Home() {
                 authorization: `Bearer ${liff.getAccessToken()}`
               }
             })
-            document.location.href = payload.data
+            window.open('/redirect?url=' + payload.data)
           }}>Pay with SCB</Button>
       </Flex>
 

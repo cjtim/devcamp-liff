@@ -1,13 +1,16 @@
 import { Button, Flex } from '@chakra-ui/core'
-import { useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import React from 'react'
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 function Redirect() {
-  let { orderid } = useParams()
-  const newUrl = 'scbeasysim://purchase/' + orderid
-  document.location.href = newUrl
+  let query = useQuery()
+  const url = query.get('url')
+  window.location.href = url
   return <Flex align="center" justify="center">
-    <Button bg="#4e2e7f" href={newUrl} color='white' onClick={() => document.location.href = newUrl}>Pay with SCB</Button>
+    <Button bg="#4e2e7f" href={url} color='white' onClick={() => document.location.href = url}>Pay with SCB</Button>
   </Flex>
 }
 export default Redirect
