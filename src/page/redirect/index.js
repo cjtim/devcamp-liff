@@ -8,9 +8,9 @@ function useQuery() {
 function Redirect() {
   let query = useQuery()
   const url = query.get('url')
-  window.location.href = url
+  if (url) window.location.href = url
   return <Flex align="center" justify="center">
-    <Button bg="#4e2e7f" href={url} color='white' onClick={() => document.location.href = url}>Pay with SCB</Button>
+    <Button onClick={() => document.location.href = url}>Click here, if your browser not redirect.</Button>
   </Flex>
 }
 export default Redirect
