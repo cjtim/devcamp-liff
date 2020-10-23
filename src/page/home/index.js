@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
 // import { lineState } from '../../recoil'
-import { Input, Flex, Button, Link } from '@chakra-ui/core'
 // import { useRecoilState } from 'recoil'
+import React, { useState } from 'react'
+import { Input, Flex, Button, Link } from '@chakra-ui/core'
 import liff from '@line/liff'
 import axios from 'axios'
 import LoadingAnimation from './../../component/loadingAnimation'
@@ -13,18 +13,6 @@ const backendInstance = axios.create({
 function Home() {
   const [amount, setAmount] = useState(100)
   const [isLoading, setisLoading] = useState(false)
-  useEffect(() => {
-    async function liffLogin() {
-      await liff.init({ liffId: process.env.REACT_APP_LIFF_ID })
-      if (!liff.isLoggedIn()) {
-        liff.login()
-      }
-      await liff.ready
-      console.log(liff.getAccessToken())
-      console.log(await liff.getProfile())
-    }
-    liffLogin()
-  }, [])
   if (isLoading) return <LoadingAnimation/>
   return (
     <main>
@@ -40,7 +28,7 @@ function Home() {
       </Flex>
       {/* Omise */}
       <Flex justify="center" py={4}>
-        <Link href="https://restaurant-helper-liff.vercel.app/menu/1">
+        <Link href="/menu/1">
           <Button variantColor="green">Pay with Omise</Button>
         </Link>
       </Flex>
@@ -55,7 +43,7 @@ function Home() {
                 authorization: `Bearer ${liff.getAccessToken()}`
               }
             })
-            window.open('/redirect?url=' + payload.data)
+            liff.openWindow({ url:'/redirect?url=' + payload.data, external: false})
             setisLoading(false)
           }}>Pay with SCB</Button>
       </Flex>
