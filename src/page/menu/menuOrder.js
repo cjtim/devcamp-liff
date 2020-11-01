@@ -4,7 +4,7 @@ import axios from 'axios'
 import LoadingAnimation from '../../component/loadingAnimation'
 import liff from '@line/liff'
 import { useHistory } from 'react-router-dom'
-function MenuOrder() {
+export function MenuOrder() {
   const history = useHistory()
   const [isLoading, setisLoading] = useState(true)
   const amount = 12345
@@ -57,4 +57,3 @@ function MenuOrder() {
   if (isLoading) return <LoadingAnimation />
   return <></>
 }
-export default MenuOrder

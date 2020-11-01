@@ -10,7 +10,7 @@ const backendInstance = axios.create({
   baseURL: 'https://restaurant-helper-omise-nwbwsoebza-an.a.run.app'
 })
 
-function Home() {
+export function Home() {
   const [amount, setAmount] = useState(100)
   const [isLoading, setisLoading] = useState(false)
   if (isLoading) return <LoadingAnimation/>
@@ -51,4 +51,3 @@ function Home() {
     </main>
   )
 }
-export default Home

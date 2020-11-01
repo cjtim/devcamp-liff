@@ -8,7 +8,7 @@ import liff from '@line/liff/dist/lib'
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
 })
-function PaymentSuccess() {
+export function PaymentSuccess() {
   const { transactionId } = useParams()
   const [isLoading, setisLoading] = useState(false)
   useEffect(() => {
@@ -47,4 +47,3 @@ function PaymentSuccess() {
       </>
   )
 }
-export default PaymentSuccess

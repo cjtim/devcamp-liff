@@ -3,7 +3,7 @@ import { ReactComponent as FailedIcon } from './../../component/icon/failed.svg'
 import { Flex, Text } from '@chakra-ui/core'
 import { useParams } from 'react-router-dom'
 
-export default function PaymentFailed() {
+export function PaymentFailed() {
   const { transactionId } = useParams()
   return (
     <>

@@ -13,7 +13,8 @@
     "react-lottie": "^1.2.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "2.1.1",
-    "recoil": "^0.0.13"
+    "recoil": "^0.0.13",
+    "swr": "^0.3.8-beta.2"
   },
   "scripts": {
     "dev": "BROWSER=none HTTPS=true react-scripts start",
