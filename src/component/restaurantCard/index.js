@@ -2,11 +2,11 @@ import React from 'react'
 import { Box, Flex, Text, Image, Heading, Icon, Link } from '@chakra-ui/core'
 export function RestaurantCard({ url, name, img, location }) {
   return (
-    <Link href={url} style={{textDecoration: 'none'}}>
+    <Link href={url} style={{ textDecoration: 'none' }}>
       <Flex justify="center">
         <Box w="md" borderWidth="1px" rounded="lg" overflow="hidden" bg="white">
           <Flex alignContent="center" alignItems="center">
-            <Box width="150px" height="100px">
+            <Box width="120px" height="100px">
               <Image
                 src={img}
                 objectFit="cover"
@@ -16,13 +16,15 @@ export function RestaurantCard({ url, name, img, location }) {
                 rounded="lg"
               />
             </Box>
-            <Box pl={4}>
+            <Box px={2}>
               <Heading size="md" fontFamily="'Prompt'">
                 {name}
               </Heading>
-              <Text fontSize="sm" color="#444545">{location}</Text>
+              <Text fontSize="sm" color="#444545">
+                {location}
+              </Text>
             </Box>
-            <Icon name="chevron-right" />
+            <Icon name="chevron-right" marginLeft="auto"/>
           </Flex>
         </Box>
       </Flex>
