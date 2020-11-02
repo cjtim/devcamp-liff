@@ -7,6 +7,7 @@ import LoadingAnimation from '../../component/loadingAnimation'
 import axios from 'axios'
 import useSWR from 'swr'
 import liff from '@line/liff'
+import { RestaurantMenu } from './restaurant'
 
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
@@ -16,6 +17,7 @@ export function RestaurantRoute() {
   return (
     <Switch>
       <Route exact path={match.path} component={() => <RestaurantHome />} />
+      <Route path={match.path + "/:restaurantId"} component={() => <RestaurantMenu/>}/>
       <Route component={() => 'ไม่พบร้านอาหาร'} />
     </Switch>
   )
