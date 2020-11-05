@@ -25,7 +25,7 @@ export function Home() {
             const scb = await createSCBLink()
             liff.openWindow({
               url: '/redirect?url=' + scb.deeplinkUrl,
-              external: false
+              external: true
             })
             setisLoading(false)
           }}
