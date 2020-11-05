@@ -18,7 +18,7 @@ export function PaymentSuccess() {
       backendInstance.defaults.headers[
         'authorization'
       ] = `Bearer ${liff.getAccessToken()}`
-      const response = await backendInstance.post('/payment/status', {
+      const response = await backendInstance.post('/transaction/ispaid', {
         transactionId: transactionId
       })
       console.log(response.data)
