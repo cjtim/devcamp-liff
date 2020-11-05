@@ -22,10 +22,10 @@ export function Home() {
           color="white"
           onClick={async () => {
             setisLoading(true)
-            const scb = await createSCBLink()
-            liff.openWindow({
-              url: '/redirect?url=' + scb.deeplinkUrl,
-              external: true
+            await createSCBLink().then(scb => {
+              liff.openWindow({
+                url: '/redirect?url=' + scb.deeplinkUrl
+              })
             })
             setisLoading(false)
           }}
