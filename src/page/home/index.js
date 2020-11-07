@@ -14,7 +14,13 @@ const backendInstance = axios.create({
 export function Home() {
   const [isLoading, setisLoading] = useState(false)
   React.useEffect(() => {
-    backendInstance.get('')
+    ;(async () => {
+      await liff.ready
+      backendInstance.defaults.headers[
+        'authorization'
+      ] = `Bearer ${liff.getAccessToken()}`
+      backendInstance.get('')
+    })()
   }, [])
   if (isLoading) return <LoadingAnimation />
   return (
@@ -41,24 +47,12 @@ export function Home() {
 }
 
 async function createSCBLink() {
-  const payload = await backendInstance.post('/order/create', orderPayload, {
-    headers: {
-      authorization: `Bearer ${liff.getAccessToken()}`
-    }
-  })
+  const payload = await backendInstance.post('/order/create', orderPayload)
   console.log(payload.data)
-  const scb = await backendInstance.post(
-    '/transaction/create',
-    {
-      payAmount: payload.data.totalAmount,
-      orderId: payload.data.id
-    },
-    {
-      headers: {
-        authorization: `Bearer ${liff.getAccessToken()}`
-      }
-    }
-  )
+  const scb = await backendInstance.post('/transaction/create', {
+    payAmount: payload.data.totalAmount,
+    orderId: payload.data.id
+  })
   console.log(scb.data)
   return scb.data
 }
