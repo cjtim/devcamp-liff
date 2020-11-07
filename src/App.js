@@ -8,7 +8,7 @@ import { MenuRoute } from './page/menu'
 import { PaymentRoute } from './page/payment'
 import { RestaurantRoute } from './page/restaurant'
 
-function App() {
+export default function App() {
   useEffect(() => {
     async function liffLogin() {
       await liff.init({ liffId: process.env.REACT_APP_LIFF_ID })
@@ -31,5 +31,3 @@ function App() {
     </Switch>
   )
 }
-
-export default App

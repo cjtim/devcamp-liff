@@ -1,12 +1,10 @@
 import liff from '@line/liff'
-import { useHistory } from 'react-router-dom'
-// eslint-disable-next-line
+import { Redirect } from 'react-router-dom'
 import React from 'react'
 
 export function Logout() {
-  let history = useHistory()
   if (liff.isLoggedIn()) {
     liff.logout()
   }
-  history.push('/')
+  return <Redirect to="/"/>
 }

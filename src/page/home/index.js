@@ -13,6 +13,9 @@ const backendInstance = axios.create({
 
 export function Home() {
   const [isLoading, setisLoading] = useState(false)
+  React.useEffect(() => {
+    backendInstance.get('')
+  }, [])
   if (isLoading) return <LoadingAnimation />
   return (
     <main>

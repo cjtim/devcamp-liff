@@ -26,4 +26,6 @@ yarn-error.log*
 # Environment Variables
 .env
 .env.build
+.env.development
 *.svg:Zone.Identifier
+yarn.lock
