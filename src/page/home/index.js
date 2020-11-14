@@ -17,6 +17,7 @@ export function Home() {
           color="white"
           onClick={async () => {
             setcart(orderPayload)
+            localStorage.setItem('cart', JSON.stringify(orderPayload))
             toast({
               title: "เพิ่มเมนูลงตระกร้าแล้ว",
               description: "ลองกดปุ่มตระกร้าเลย!",

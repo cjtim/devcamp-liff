@@ -28,6 +28,9 @@ export default function CartDrawer() {
       await liff.ready
       backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
       console.log((await backendInstance.get('')).data)
+      const localCart = localStorage.getItem('cart')
+      if (localCart) setCart(JSON.parse(localCart))
+
     })()
   }, [])
   return (
@@ -89,6 +92,7 @@ export default function CartDrawer() {
                 onClick={() => {
                   onClose()
                   setCart([])
+                  localStorage.setItem('cart', [])
                 }}
               >
                 Clear
@@ -104,6 +108,7 @@ export default function CartDrawer() {
                       url: '/redirect?url=' + scb.deeplinkUrl
                     })
                     setCart([])
+                    localStorage.setItem('cart', [])
                     onClose()
                   } catch (e) {
                     alert(e.message)
