@@ -21,7 +21,7 @@ export function Home() {
               title: "เพิ่มเมนูลงตระกร้าแล้ว",
               description: "ลองกดปุ่มตระกร้าเลย!",
               status: "success",
-              duration: 5000,
+              duration: 4000,
               isClosable: true,
             })
           }}

@@ -13,13 +13,14 @@ import {
 import liff from '@line/liff'
 import axios from 'axios'
 import { HamburgerIcon } from '@chakra-ui/icons'
-import { IconButton } from '@chakra-ui/react'
+import { IconButton, Flex, Spinner } from '@chakra-ui/react'
 import { cart as atomCart } from '../../recoil'
 import { useRecoilState } from 'recoil'
 import { MenuCard } from '../menuCard'
 
 export default function CartDrawer() {
   const [cart, setCart] = useRecoilState(atomCart)
+  const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   React.useEffect(() => {
@@ -39,17 +40,35 @@ export default function CartDrawer() {
         onClick={onOpen}
         position="fixed"
         right="10px"
+        
       >
         Open
       </IconButton>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef} size={"xl"}>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+        size={'xl'}
+      >
         <DrawerOverlay>
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader>Cart</DrawerHeader>
 
             <DrawerBody>
-              {cart.selectedMenu &&
+              {isLoading && (
+                <Flex
+                  justify="center"
+                  alignItems="center"
+                  justifyContent="center"
+                  height="50%"
+                >
+                  <Spinner size="xl" thickness="4px" />
+                </Flex>
+              )}
+              {!isLoading &&
+                cart.selectedMenu &&
                 cart.selectedMenu.map((i, index) => {
                   return (
                     <MenuCard
@@ -68,7 +87,7 @@ export default function CartDrawer() {
                 variant="outline"
                 mr={3}
                 onClick={() => {
-                  onClose();
+                  onClose()
                   setCart([])
                 }}
               >
@@ -77,12 +96,19 @@ export default function CartDrawer() {
               <Button
                 colorScheme="blue"
                 textColor="white"
-                
                 onClick={async () => {
-                  const scb = await createSCBLink(cart)
-                  liff.openWindow({
-                    url: '/redirect?url=' + scb.deeplinkUrl
-                  })
+                  setIsLoading(true)
+                  try {
+                    const scb = await createSCBLink(cart)
+                    liff.openWindow({
+                      url: '/redirect?url=' + scb.deeplinkUrl
+                    })
+                    setCart([])
+                    onClose()
+                  } catch (e) {
+                    alert(e.message)
+                  }
+                  setIsLoading(false)
                 }}
               >
                 Checkout
