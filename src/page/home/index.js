@@ -1,56 +1,36 @@
-// import { lineState } from '../../recoil'
-// import { useRecoilState } from 'recoil'
-import React, { useState } from 'react'
-import { Flex, Button } from '@chakra-ui/react'
-import liff from '@line/liff'
-import axios from 'axios'
-import LoadingAnimation from './../../component/loadingAnimation'
+import React from 'react'
+import { Flex, Button, useToast } from '@chakra-ui/react'
 import { orderPayload } from './../../mockupData'
+import CartDrawer from '../../component/cartDrawer'
+import { cart as atomCart} from './../../recoil'
+import { useSetRecoilState } from 'recoil'
 
-const backendInstance = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL
-})
 
 export function Home() {
-  const [isLoading, setisLoading] = useState(false)
-  React.useEffect(() => {
-    ;(async () => {
-      await liff.ready
-      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-      console.log((await backendInstance.get('')).data)
-    })()
-  }, [])
-  if (isLoading) return <LoadingAnimation />
+  const toast = useToast()
+  const setcart = useSetRecoilState(atomCart)
   return (
     <main>
       <Flex justify="center" py={4}>
         <Button
-          bg="#4e2e7f"
+          colorScheme="blue"
           color="white"
           onClick={async () => {
-            setisLoading(true)
-            await createSCBLink().then(scb => {
-              liff.openWindow({
-                url: '/redirect?url=' + scb.deeplinkUrl
-              })
+            setcart(orderPayload)
+            toast({
+              title: "เพิ่มเมนูลงตระกร้าแล้ว",
+              description: "ลองกดปุ่มตระกร้าเลย!",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
             })
-            setisLoading(false)
           }}
         >
-          Pay with SCB
+          Add Menu to cart
         </Button>
       </Flex>
+      <CartDrawer />
     </main>
   )
 }
 
-async function createSCBLink() {
-  const payload = await backendInstance.post('/order/create', orderPayload)
-  console.log(payload.data)
-  const scb = await backendInstance.post('/transaction/create', {
-    payAmount: payload.data.totalAmount,
-    orderId: payload.data.id
-  })
-  console.log(scb.data)
-  return scb.data
-}

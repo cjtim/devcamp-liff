@@ -2,7 +2,7 @@ export const allRestaurant = [
   {
     id: 1,
     name: 'ก๋วยเตี๋ยวไก่มะระ อร่อยยันโลกหน้า',
-    imgUrl: [
+    img: [
       'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
     ],
     location: 'โรงอาหารคณะวิทยาศาสตร์'
@@ -10,7 +10,7 @@ export const allRestaurant = [
   {
     id: 2,
     name: 'อาหารตามสั่งป้าม่วง นัมเบอร์วัน',
-    imgUrl: [
+    img: [
       'https://shellshuanshim.com/webimages/6-cooked-to-order-dish/blog-teaser-m.jpg?sfvrsn=342aa04b_2'
     ],
     location: 'บาร์วิศวะ'
@@ -22,27 +22,37 @@ export const orderPayload = {
     {
       menuId: '6565a71c-4734-4f10-b8e5-46b9d1819893',
       note: 'note',
-      unit: 1
+      name: 'เมนูที่ 1',
+      unit: 1,
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
     },
     {
       menuId: 'adbad266-c0e7-487a-b7e7-03519b3542e3',
       note: 'note',
-      unit: 1
+      name: 'เมนูที่ 1',
+      unit: 1,
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
     },
     {
       menuId: 'c2a3771f-12e2-452b-94b8-f8428ecf2843',
       note: 'note',
-      unit: 1
+      name: 'เมนูที่ 1',
+      unit: 1,
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
     },
     {
       menuId: 'e3f743a2-0425-466c-a0a2-829b851f8d3e',
       note: 'note',
-      unit: 1
+      name: 'เมนูที่ 1',
+      unit: 1,
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
     },
     {
       menuId: '7ba05733-31fd-48c4-be78-a26eff81a138',
       note: 'note',
-      unit: 1
+      name: 'เมนูที่ 1',
+      unit: 1,
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
     }
   ],
   restaurantId: 'd8a7a4cf-ecd9-4725-9f83-ab8fda676190'
