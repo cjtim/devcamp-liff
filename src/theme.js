@@ -1,4 +1,4 @@
-import { theme } from '@chakra-ui/core'
-export default {
-  ...theme,
-}
+import { extendTheme } from '@chakra-ui/react'
+export default extendTheme({
+  
+})

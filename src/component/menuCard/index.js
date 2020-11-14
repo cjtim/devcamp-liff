@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Text, Image, Heading, Link } from '@chakra-ui/core'
+import { Box, Flex, Text, Image, Heading, Link } from '@chakra-ui/react'
 export function MenuCard({ url, name, img, price }) {
   return (
     <Link href={url} style={{ textDecoration: 'none' }}>

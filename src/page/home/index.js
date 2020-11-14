@@ -1,7 +1,7 @@
 // import { lineState } from '../../recoil'
 // import { useRecoilState } from 'recoil'
 import React, { useState } from 'react'
-import { Flex, Button } from '@chakra-ui/core'
+import { Flex, Button } from '@chakra-ui/react'
 import liff from '@line/liff'
 import axios from 'axios'
 import LoadingAnimation from './../../component/loadingAnimation'
@@ -16,10 +16,8 @@ export function Home() {
   React.useEffect(() => {
     ;(async () => {
       await liff.ready
-      backendInstance.defaults.headers[
-        'authorization'
-      ] = `Bearer ${liff.getAccessToken()}`
-      backendInstance.get('')
+      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+      console.log((await backendInstance.get('')).data)
     })()
   }, [])
   if (isLoading) return <LoadingAnimation />

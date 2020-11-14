@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Text, Image, Heading, Icon, Link } from '@chakra-ui/core'
+import { Box, Flex, Text, Image, Heading, Icon, Link } from '@chakra-ui/react'
 export function RestaurantCard({ url, name, img, location }) {
   return (
     <Link href={url} style={{ textDecoration: 'none' }}>

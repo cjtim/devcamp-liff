@@ -1,6 +1,6 @@
 import React from 'react'
 import { ReactComponent as FailedIcon } from './../../component/icon/failed.svg'
-import { Flex, Text } from '@chakra-ui/core'
+import { Flex, Text } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
 export function PaymentFailed() {

@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/core'
+import { Flex, Text } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import SuccessLogo from './../../component/icon/success'

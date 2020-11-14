@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/core'
+import { Box } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import { RestaurantCard } from '../../component/restaurantCard'
