@@ -15,9 +15,7 @@ export function PaymentSuccess() {
     ;(async () => {
       setisLoading(true)
       await liff.ready
-      backendInstance.defaults.headers[
-        'authorization'
-      ] = `Bearer ${liff.getAccessToken()}`
+      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
       const response = await backendInstance.post('/transaction/ispaid', {
         transactionId: transactionId
       })
@@ -28,22 +26,24 @@ export function PaymentSuccess() {
       setisLoading(false)
     })()
   }, [])
-  if (isLoading) return <LoadingAnimation />
-  return (
-    <>
-      <Flex alignItems="center" justify="center" p={4}>
-        <SuccessLogo />
-      </Flex>
-      <Flex alignItems="center" justify="center">
-        <Text fontFamily="Prompt" fontSize="2xl">
-          ชำระเงินสำเร็จ
-        </Text>
-      </Flex>
-      <Flex alignItems="center" justify="center">
-        <Text fontFamily="Prompt" fontSize="sm" color="#909497">
-          Transaction id: {transactionId || 'unknown'}
-        </Text>
-      </Flex>
+  if (!isLoading) {
+    return (
+      <>
+        <Flex alignItems="center" justify="center" p={4}>
+          <SuccessLogo />
+        </Flex>
+        <Flex alignItems="center" justify="center">
+          <Text fontFamily="Prompt" fontSize="2xl">
+            ชำระเงินสำเร็จ
+          </Text>
+        </Flex>
+        <Flex alignItems="center" justify="center">
+          <Text fontFamily="Prompt" fontSize="sm" color="#909497">
+            Transaction id: {transactionId || 'unknown'}
+          </Text>
+        </Flex>
       </>
-  )
+    )
+  }
+  return <LoadingAnimation />
 }
