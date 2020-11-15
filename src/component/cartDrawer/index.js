@@ -34,7 +34,6 @@ export default function CartDrawer() {
     ;(async () => {
       await liff.ready
       backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-      console.log((await backendInstance.get('')).data)
       // Get cart data from localstorage if exist
       // localstorage is not realtime sync like recoil
       const localCart = localStorage.getItem('cart')
@@ -53,10 +52,6 @@ export default function CartDrawer() {
     try {
       const scb = await checkout(cart)
       window.open('/redirect?url=' + scb.deeplinkUrl)
-      // window.location.pathname = '/redirect?url=' + scb.deeplinkUrl
-      // liff.openWindow({
-        // url: '/redirect?url=' + scb.deeplinkUrl
-      // })
       setCart([])
       localStorage.setItem('cart', [])
       onClose()
@@ -67,32 +62,24 @@ export default function CartDrawer() {
   }
 
   return (
-    <>
-      <Cart
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        btnRef={btnRef}
-        onClearBtn={onClearBtn}
-        onCheckoutBtn={async () => onCheckoutBtn()}
-      >
-        {isLoading && <LoadingSpinner />}
-        {!isLoading &&
-          cart.selectedMenu &&
-          cart.selectedMenu.map((i, index) => {
-            return (
-              <MenuCard
-                key={index}
-                name={i.name}
-                img={i.img}
-                url={'/menu/' + i.id}
-                price={i.unit}
-              />
-            )
-          })}
-          {!cart.selectedMenu && !isLoading && "Cart is empty"}
-      </Cart>
-    </>
+    <Cart
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      btnRef={btnRef}
+      onClearBtn={onClearBtn}
+      onCheckoutBtn={async () => onCheckoutBtn()}
+    >
+      {isLoading && <LoadingSpinner />}
+      {!isLoading &&
+        cart.selectedMenu &&
+        cart.selectedMenu.map((i, index) => {
+          return (
+            <MenuCard key={index} name={i.name} img={i.img} url={'/menu/' + i.id} price={i.unit} />
+          )
+        })}
+      {!cart.selectedMenu && !isLoading && 'Cart is empty'}
+    </Cart>
   )
 }
 
@@ -117,17 +104,20 @@ function LoadingSpinner() {
 function Cart({ children, isOpen, onOpen, onClose, btnRef, onClearBtn, onCheckoutBtn }) {
   return (
     <>
-      <IconButton
-        aria-label="Cart Icon"
-        ref={btnRef}
-        colorScheme="teal"
-        icon={<HamburgerIcon />}
-        onClick={onOpen}
-        position="fixed"
-        right="10px"
-      >
-        Open
-      </IconButton>
+      <Flex justify="center">
+        <IconButton
+          alignSelf="flex-end"
+          marginBottom="36"
+          aria-label="Cart Icon"
+          ref={btnRef}
+          colorScheme="teal"
+          icon={<HamburgerIcon />}
+          onClick={onOpen}
+          w="90%"
+        >
+          Open
+        </IconButton>
+      </Flex>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef} size="xl">
         <DrawerOverlay>
           <DrawerContent>

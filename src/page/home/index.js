@@ -1,16 +1,16 @@
 import React from 'react'
 import { Flex, Button, useToast } from '@chakra-ui/react'
 import { orderPayload } from './../../mockupData'
-import CartDrawer from '../../component/cartDrawer'
 import { cart as atomCart} from './../../recoil'
 import { useSetRecoilState } from 'recoil'
+import { PageLayout } from '../../component/pageLayout'
 
 
 export function Home() {
   const toast = useToast()
   const setcart = useSetRecoilState(atomCart)
   return (
-    <main>
+    <PageLayout>
       <Flex justify="center" py={4}>
         <Button
           colorScheme="blue"
@@ -30,8 +30,7 @@ export function Home() {
           Add Menu to cart
         </Button>
       </Flex>
-      <CartDrawer />
-    </main>
+    </PageLayout>
   )
 }
 
