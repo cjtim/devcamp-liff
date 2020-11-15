@@ -34,7 +34,7 @@ function RestaurantHome() {
         setrestaurantPayload(api.data)
         setIsLoading(false)
       } catch (e) {
-        // push to error page
+        alert(e.meesage)
       }
     })()
   }, [])

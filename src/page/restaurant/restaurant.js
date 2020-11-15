@@ -21,7 +21,7 @@ export function RestaurantMenu() {
         })
         setMenuPayload(api.data)
       } catch (e) {
-        // push to error page
+        alert(e.message)
       }
     })()
   }, [])
