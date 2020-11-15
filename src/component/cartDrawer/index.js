@@ -34,10 +34,6 @@ export default function CartDrawer() {
     ;(async () => {
       await liff.ready
       backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-      // Get cart data from localstorage if exist
-      // localstorage is not realtime sync like recoil
-      const localCart = localStorage.getItem('cart')
-      if (localCart) setCart(JSON.parse(localCart))
     })()
   }, [])
 
