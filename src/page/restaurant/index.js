@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import { RestaurantCard } from '../../component/restaurantCard'
 import LoadingAnimation from '../../component/loadingAnimation'
@@ -22,8 +22,8 @@ export function RestaurantRoute() {
 }
 
 function RestaurantHome() {
-  const [isLoading, setIsLoading] = React.useState(false)
-  const [restaurantPayload, setrestaurantPayload] = React.useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [restaurantPayload, setrestaurantPayload] = useState(undefined)
   useEffect(() => {
     ;(async () => {
       try {
@@ -34,7 +34,8 @@ function RestaurantHome() {
         setrestaurantPayload(api.data)
         setIsLoading(false)
       } catch (e) {
-        alert(e.meesage)
+        setIsLoading(false)
+        alert(e.message)
       }
     })()
   }, [])
