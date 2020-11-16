@@ -5,7 +5,7 @@ import { cart as atomCart } from '../../recoil'
 import CartDrawer from '../cartDrawer'
 function PageLayout({ children }) {
   const [cart, setCart] = useRecoilState(atomCart)
-  React.useState(() => {
+  React.useEffect(() => {
     const localCart = localStorage.getItem('cart')
     if (localCart) setCart(JSON.parse(localCart))
   }, [])

@@ -22,12 +22,11 @@ export function RestaurantRoute() {
 }
 
 function RestaurantHome() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [restaurantPayload, setrestaurantPayload] = useState(undefined)
   useEffect(() => {
     ;(async () => {
       try {
-        setIsLoading(true)
         await liff.ready
         backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
         const api = await backendInstance.post('/restaurant/list')
