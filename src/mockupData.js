@@ -24,21 +24,24 @@ export const orderPayload = {
       note: 'note',
       name: 'เมนูที่ 1',
       unit: 1,
-      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg',
+      price: 1
     },
     {
       menuId: 'adbad266-c0e7-487a-b7e7-03519b3542e3',
       note: 'note',
       name: 'เมนูที่ 1',
       unit: 1,
-      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg',
+      price: 2
     },
     {
       menuId: 'c2a3771f-12e2-452b-94b8-f8428ecf2843',
       note: 'note',
       name: 'เมนูที่ 1',
       unit: 1,
-      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg'
+      img: 'https://www.nestleprofessional.co.th/sites/g/files/gfb531/f/styles/recipe/public/media/noodle-with-marinated-pork-in-clear-soup-540x400.jpg',
+      price: 3
     },
     {
       menuId: 'e3f743a2-0425-466c-a0a2-829b851f8d3e',

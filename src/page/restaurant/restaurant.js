@@ -3,6 +3,7 @@ import LoadingAnimation from '../../component/loadingAnimation'
 import axios from 'axios'
 import liff from '@line/liff'
 import { useParams } from 'react-router-dom'
+import { PageLayout } from '../../component/pageLayout'
 import { MenuCard } from './../../component/menuCard'
 
 const backendInstance = axios.create({
@@ -27,20 +28,12 @@ export function RestaurantMenu() {
   }, [])
   if (menuPayload)
     return (
-      <>
+      <PageLayout>
         {menuPayload &&
           menuPayload.map((menu, index) => {
-            return (
-              <MenuCard
-                key={index}
-                name={menu.name}
-                img={menu.img}
-                url={'/menu/' + menu.id}
-                price={menu.price}
-              />
-            )
+            return <MenuCard key={index} menu={menu}/>
           })}
-      </>
+      </PageLayout>
     )
   return <LoadingAnimation />
 }

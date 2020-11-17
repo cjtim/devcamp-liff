@@ -9,3 +9,8 @@ export const cart = atom({
   key: 'cart',
   default: []
 })
+
+export const currentRestaurant = atom({
+  key: 'currentRestaurant',
+  default: ""
+})
