@@ -1,49 +1,15 @@
 import React from 'react'
 import { Box, Flex, Text, Image, Heading, Link } from '@chakra-ui/react'
-import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
 import { AddIcon } from '@chakra-ui/icons'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { StateController } from '../../function/state'
 
 export function MenuCard({ menu }) {
-  const [cart, setCart] = useRecoilState(atomCart)
-  const setCurrentRestaurant = useSetRecoilState(atomCurrentRestaurant)
 
-  function appendUnit(menu) {
+  async function appendUnit(menu) {
     try {
-      let foundIndex = cart.findIndex(x => x.id === menu.id)
-      if (foundIndex !== -1)
-        setCart(
-          cart.map(i => {
-            if (i.menuId === menu.id) {
-              return {
-                ...i,
-                unit: i.unit + 1
-              }
-            }
-            return i
-          })
-        )
-      else
-        setCart([
-          ...cart,
-          {
-            menuId: menu.id,
-            name: menu.name,
-            note: '',
-            price: menu.price,
-            unit: 1,
-            img: menu.img,
-            restaurantId: menu.restaurantId
-          }
-        ])
-      setCurrentRestaurant(menu.restaurantId)
-      setTimeout(() => {
-        localStorage.setItem('cart', JSON.stringify(cart))
-        localStorage.setItem('currentRestaurant', JSON.stringify(menu.restaurantId))
-      }, 100)
+      await StateController.plusMenuUnit(menu, menu.restaurantId)
     } catch (e) {
-      setCart([])
-      localStorage.removeItem('cart')
+      await StateController.clear()
     }
   }
   return (

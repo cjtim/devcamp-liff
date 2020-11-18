@@ -8,6 +8,7 @@ import { MenuRoute } from './page/menu'
 import { PaymentRoute } from './page/payment'
 import { RestaurantRoute } from './page/restaurant'
 import { OrderRoute } from './page/order'
+import {StateController} from './function/state'
 
 export default function App() {
   useEffect(() => {
@@ -19,6 +20,8 @@ export default function App() {
       console.log(await liff.getProfile())
     }
     liffLogin()
+
+    StateController.load()
   }, [])
   return (
     <Switch>

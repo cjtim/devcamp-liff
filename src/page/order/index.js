@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import axios from 'axios'
 import liff from '@line/liff'
 import LoadingAnimation from '../../component/loadingAnimation'
+import { OrderCard } from '../../component/orderCard'
 
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
@@ -28,6 +29,7 @@ function OrderHome() {
         backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
         const api = await backendInstance.post('/order/list')
         setOrderPayload(api.data)
+        console.log(api.data)
         setIsLoading(false)
       } catch (e) {
         setIsLoading(false)
@@ -40,7 +42,8 @@ function OrderHome() {
       <>
         {orderPayload &&
           orderPayload.map((i, index) => {
-            return <li key={index}>{i.id}</li>
+            if (index < 30) return <OrderCard key={index} order={i} />
+            return <></>
           })}
       </>
     )

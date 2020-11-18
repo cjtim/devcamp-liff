@@ -14,8 +14,12 @@ import liff from '@line/liff'
 import axios from 'axios'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { IconButton, Flex, Spinner } from '@chakra-ui/react'
-import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { StateController } from '../../function/state'
+import { useRecoilValue } from 'recoil'
+import {
+  cart as atomCart,
+  currentRestaurant as atomCurrentRestaurant,
+} from '../../recoil'
 
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
@@ -35,14 +39,12 @@ async function checkout(cart, restaurantId) {
   return scb.data
 }
 export default function CartDrawer() {
-  // Drawer controller
+  const cart = useRecoilValue(atomCart)
+  const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
+  const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
-  // State
-  const [cart, setCart] = useRecoilState(atomCart)
-  const [isLoading, setIsLoading] = React.useState(false)
-  const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
-  // First load
+  
   React.useEffect(() => {
     ;(async () => {
       await liff.ready
@@ -50,24 +52,32 @@ export default function CartDrawer() {
     })()
   }, [])
 
-  function onClearBtn() {
+  async function setNote(noteText, menuId) {
+    await StateController.setOrderNote(noteText, menuId)
+  }
+  async function onClearBtn() {
     onClose()
-    setCart([])
-    localStorage.removeItem('cart')
+    StateController.clear()
   }
 
   async function onCheckoutBtn() {
     setIsLoading(true)
     try {
-      const scb = await checkout(cart.map(object => ({ ...object }))  , currentRestaurant)
+      const scb = await checkout(
+        cart.map(object => ({ ...object })),
+        currentRestaurant
+      )
       window.open('/redirect?url=' + scb.deeplinkUrl)
-      setCart([])
-      localStorage.removeItem('cart')
+      StateController.clear()
       onClose()
     } catch (e) {
       alert(e.message)
     }
     setIsLoading(false)
+  }
+  function TotalPrice() {
+    let total = StateController.getTotalPrice(cart)
+    return <>{total}</>
   }
   if (cart.length > 0)
     return (
@@ -78,6 +88,7 @@ export default function CartDrawer() {
         btnRef={btnRef}
         onClearBtn={onClearBtn}
         onCheckoutBtn={async () => onCheckoutBtn()}
+        total={<TotalPrice />}
       >
         {isLoading && <LoadingSpinner />}
         {!isLoading &&
@@ -87,11 +98,12 @@ export default function CartDrawer() {
               <OrderCard
                 key={index}
                 name={i.name}
-                id={i.id}
+                id={i.menuId}
                 img={i.img}
                 note={i.note}
                 price={i.price}
                 unit={i.unit}
+                setNote={setNote}
               />
             )
           })}
@@ -108,7 +120,7 @@ function LoadingSpinner() {
     </Flex>
   )
 }
-function Cart({ children, isOpen, onOpen, onClose, btnRef, onClearBtn, onCheckoutBtn }) {
+function Cart({ children, isOpen, onOpen, onClose, btnRef, onClearBtn, onCheckoutBtn, total }) {
   return (
     <>
       <Flex justify="center">
@@ -138,7 +150,7 @@ function Cart({ children, isOpen, onOpen, onClose, btnRef, onClearBtn, onCheckou
                     Total
                   </Text>
                   <Text fontSize="lg" marginLeft="auto">
-                    ฿100
+                    ฿{total}
                   </Text>
                 </Flex>
                 <Flex>
@@ -158,7 +170,7 @@ function Cart({ children, isOpen, onOpen, onClose, btnRef, onClearBtn, onCheckou
   )
 }
 
-function OrderCard({ id, name, note, price, img, unit, restaurantId, url }) {
+function OrderCard({ id, name, note, price, img, unit, restaurantId, url, setNote }) {
   return (
     <Link href={url} style={{ textDecoration: 'none' }}>
       <Flex justify="center">
@@ -179,11 +191,21 @@ function OrderCard({ id, name, note, price, img, unit, restaurantId, url }) {
                 {name}
               </Heading>
             </Box>
-            <Text fontSize="md" fontFamily="prompt" marginLeft="auto">
-              {'total ' + price * unit + ' บาท'}
-            </Text>
+            <Flex justify="center" flexDir="column" marginLeft="auto">
+              <Text fontSize="md" fontFamily="prompt" marginLeft="auto">
+                {`${unit} หน่วย`}
+              </Text>
+              <Text fontSize="md" fontFamily="prompt" marginLeft="auto">
+                {price * unit + ' บาท'}
+              </Text>
+            </Flex>
           </Flex>
-          <Input placeholder="Note เช่น ไม่เผ็ด" size="md" />
+          <Input
+            placeholder="Note เช่น ไม่เผ็ด"
+            size="md"
+            value={note}
+            onChange={e => setNote(e.target.value, id)}
+          />
         </Box>
       </Flex>
     </Link>
