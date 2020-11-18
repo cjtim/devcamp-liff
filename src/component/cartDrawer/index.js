@@ -67,7 +67,8 @@ export default function CartDrawer() {
         cart.map(object => ({ ...object })),
         currentRestaurant
       )
-      window.open('/redirect?url=' + scb.deeplinkUrl)
+      window.location.href = scb.deeplinkUrl
+      // window.open('/redirect?url=' + scb.deeplinkUrl)
       StateController.clear()
       onClose()
     } catch (e) {
