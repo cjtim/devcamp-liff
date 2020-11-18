@@ -4,7 +4,7 @@ import axios from 'axios'
 import liff from '@line/liff'
 import { useParams } from 'react-router-dom'
 import { PageLayout } from '../../component/pageLayout'
-import { MenuCard } from './../../component/menuCard'
+import { MenuCard } from '../../component/menuCard'
 
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL

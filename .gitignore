@@ -25,7 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment Variables
-.env
-.env.build
-.env.development
+.env*
 *.svg:Zone.Identifier
+

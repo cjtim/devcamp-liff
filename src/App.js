@@ -7,6 +7,7 @@ import { Logout } from './page/logout'
 import { MenuRoute } from './page/menu'
 import { PaymentRoute } from './page/payment'
 import { RestaurantRoute } from './page/restaurant'
+import { OrderRoute } from './page/order'
 
 export default function App() {
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function App() {
       <Route exact path="/logout" component={() => <Logout />} />
       <Route path="/restaurant" component={() => <RestaurantRoute />} />
       <Route path="/payment" component={() => <PaymentRoute />} />
+      <Route path="/order" component={() => <OrderRoute />} />
       <Route path="/menu" component={() => <MenuRoute />} />
       <Route component={() => <h1>Not found</h1>} />
     </Switch>

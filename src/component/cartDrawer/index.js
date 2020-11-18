@@ -59,8 +59,6 @@ export default function CartDrawer() {
   async function onCheckoutBtn() {
     setIsLoading(true)
     try {
-      console.log(cart.map(object => ({ ...object })))
-      console.log(currentRestaurant)
       const scb = await checkout(cart.map(object => ({ ...object }))  , currentRestaurant)
       window.open('/redirect?url=' + scb.deeplinkUrl)
       setCart([])

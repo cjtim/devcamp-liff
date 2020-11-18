@@ -5,7 +5,7 @@ import { RestaurantCard } from '../../component/restaurantCard'
 import LoadingAnimation from '../../component/loadingAnimation'
 import axios from 'axios'
 import liff from '@line/liff'
-import { RestaurantMenu } from './restaurant'
+import { RestaurantMenu } from './allMenu'
 
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
