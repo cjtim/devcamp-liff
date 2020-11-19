@@ -8,6 +8,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@line/liff": "^2.4.1",
+    "cross-env": "^7.0.2",
     "framer-motion": "^2.9.4",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
@@ -18,7 +19,7 @@
     "swr": "^0.3.8-beta.2"
   },
   "scripts": {
-    "dev": "BROWSER=none HTTPS=true react-scripts start",
+    "dev": "cross-env BROWSER=none HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

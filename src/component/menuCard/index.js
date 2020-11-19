@@ -1,15 +1,15 @@
 import React from 'react'
 import { Box, Flex, Text, Image, Heading, Link } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
-import { StateController } from '../../function/state'
+import { CartController } from '../../function/cart.controller'
 
 export function MenuCard({ menu }) {
 
   async function appendUnit(menu) {
     try {
-      await StateController.plusMenuUnit(menu, menu.restaurantId)
+      await CartController.plusMenuUnit(menu, menu.restaurantId)
     } catch (e) {
-      await StateController.clear()
+      CartController.clear()
     }
   }
   return (
@@ -36,9 +36,7 @@ export function MenuCard({ menu }) {
               {menu.price + ' บาท'}
             </Text>
             <AddIcon
-              onClick={() => {
-                appendUnit(menu)
-              }}
+              onClick={() => appendUnit(menu)}
             />
           </Flex>
         </Box>

@@ -5,7 +5,7 @@ import {
 } from '../recoil'
 import { promiseSetRecoil, promiseGetRecoil } from 'recoil-outside'
 
-export class StateController {
+export class CartController {
   static clear() {
     localStorage.removeItem('cart')
     localStorage.removeItem('currentRestaurant')
