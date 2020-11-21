@@ -12,7 +12,7 @@ export function RestaurantHome() {
       setrestaurantPayload(data)
       setIsLoading(false)
     })
-  }, [])
+  }, [restaurantPayload])
   if (isLoading) return <LoadingAnimation />
   return (
     <Box bg="#D7DBDD" height={window.innerHeight}>

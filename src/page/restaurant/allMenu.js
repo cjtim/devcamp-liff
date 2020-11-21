@@ -14,7 +14,7 @@ export function RestaurantMenu() {
       setMenuPayload(data)
       setIsLoading(false)
     })
-  }, [])
+  }, [menuPayload])
   if (isLoading) return <LoadingAnimation />
   return (
     <PageLayout>

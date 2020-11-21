@@ -9,7 +9,7 @@ export function DashBoardRoute() {
   const match = useRouteMatch()
   React.useEffect(() => {
     liff.ready.then(() => setIsLoading(false))
-  }, [])
+  }, [isLoading])
   if (!isLoading)
     return (
       <Switch>

@@ -36,7 +36,7 @@ function OrderHome() {
         alert(e.message)
       }
     })()
-  }, [])
+  }, [orderPayload])
   if (!isLoading)
     return (
       <>

@@ -17,7 +17,7 @@ export function PaymentSuccess() {
       }
       setisLoading(false)
     })()
-  }, [])
+  }, [isLoading])
   if (isLoading) return <LoadingAnimation />
   return (
     <>

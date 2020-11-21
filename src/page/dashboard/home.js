@@ -12,8 +12,8 @@ export function DashBoardHome({ liffAccessToken }) {
     alert('You are not restaurant account')
     history.push('/')
   }
-
   if (!data && !error) return <LoadingAnimation />
+  if (data.length === 0) return "no new order"
   return (
     <>
       {data && 
@@ -32,4 +32,5 @@ export function DashBoardHome({ liffAccessToken }) {
         })}
     </>
   )
+
 }
