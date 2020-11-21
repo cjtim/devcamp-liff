@@ -2,7 +2,7 @@ import { Flex, Text } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import SuccessLogo from './../../component/icon/success'
-import LoadingAnimation from './../../component/loadingAnimation'
+import { LoadingAnimation } from './../../component/loadingAnimation'
 import { ApiController } from '../../function/api.controller'
 
 export function PaymentSuccess() {

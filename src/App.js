@@ -8,6 +8,7 @@ import { PaymentRoute } from './page/payment'
 import { RestaurantRoute } from './page/restaurant'
 import { OrderRoute } from './page/order'
 import { CartController } from './function/cart.controller'
+import { DashBoardRoute } from './page/dashboard'
 
 export default function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function App() {
       <Route exact path="/" component={() => <Home />} />
       <Route exact path="/redirect" component={() => <RedirectTo />} />
       <Route exact path="/logout" component={() => <Logout />} />
+      <Route path="/console" component={() => <DashBoardRoute />} />
       <Route path="/restaurant" component={() => <RestaurantRoute />} />
       <Route path="/payment" component={() => <PaymentRoute />} />
       <Route path="/order" component={() => <OrderRoute />} />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import axios from 'axios'
 import liff from '@line/liff'
-import LoadingAnimation from '../../component/loadingAnimation'
+import { LoadingAnimation } from '../../component/loadingAnimation'
 import { OrderCard } from '../../component/orderCard'
 
 const backendInstance = axios.create({

@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil'
 import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
 import { OrderCard } from './orderCard'
 import { ApiController } from '../../function/api.controller'
-import LoadingAnimation from '../loadingAnimation'
+import { LoadingAnimation } from '../loadingAnimation'
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
@@ -33,7 +33,7 @@ export default function CartDrawer() {
   if (cart.length > 0)
     return (
       <>
-      {/* Open Cart button */}
+        {/* Open Cart button */}
         <Flex justify="center">
           <IconButton
             alignSelf="flex-end"

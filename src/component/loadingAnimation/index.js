@@ -1,10 +1,9 @@
 import React from 'react'
-import { Flex, Spinner } from '@chakra-ui/react'
-function LoadingAnimation({height=window.innerHeight}) {
+import { Center, Spinner } from '@chakra-ui/react'
+export function LoadingAnimation({height=window.innerHeight}) {
   return (
-    <Flex justify="center" alignItems="center" justifyContent="center" height={height}>
+    <Center height={height}>
       <Spinner size="xl" thickness="4px" />
-    </Flex>
+    </Center>
   )
 }
-export default LoadingAnimation
