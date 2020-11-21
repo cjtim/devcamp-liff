@@ -2,28 +2,31 @@ import React from 'react'
 import { ConsoleApiController } from '../../function/consoleapi.controller'
 import { LoadingAnimation } from '../../component/loadingAnimation'
 import { DashBoardOrderCard } from '../../component/dashboardCard'
-export function DashBoardHome() {
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [orders, setorders] = React.useState(undefined)
-  React.useEffect(() => {
-    ConsoleApiController.getActiveOrder().then(data => {
-      setorders(data)
-      setIsLoading(false)
-    })
-  }, [])
-  if (isLoading) return <LoadingAnimation />
+import { useHistory } from 'react-router-dom'
+import useSWR from 'swr'
+
+export function DashBoardHome({ liffAccessToken }) {
+  const { data, error } = useSWR('/dashboard/activeorder', ConsoleApiController.realTimeOrder(liffAccessToken), { refreshInterval: 5000 })
+  if (error) {
+    let history = useHistory()
+    alert('You are not restaurant account')
+    history.push('/')
+  }
+
+  if (!data && !error) return <LoadingAnimation />
   return (
     <>
-      {orders &&
-        orders.map((order, index) => {
+      {data && 
+        data.map((order, index) => {
           return (
             <DashBoardOrderCard
               key={index}
-              index={index}
+              index={index+1}
               id={order.id}
               selectedMenu={order.selectedMenu}
               status={order.status}
               totalPrice={order['Transactions.amount']}
+              updateFunc={ConsoleApiController.updateOrderStatus}
             />
           )
         })}

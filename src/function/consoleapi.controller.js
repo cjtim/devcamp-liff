@@ -12,7 +12,7 @@ async function setHeaders() {
 export class ConsoleApiController {
   static async getActiveOrder() {
     await setHeaders()
-    const api = await backendInstance.post('/console/activeorder')
+    const api = await backendInstance.post('/dashboard/activeorder')
     return api.data
   }
   /**
@@ -22,7 +22,7 @@ export class ConsoleApiController {
    */
   static async updateOrderStatus(orderId, status, reason = undefined) {
     await setHeaders()
-    const api = await backendInstance.post('/console/updatestatus', {
+    const api = await backendInstance.post('/dashboard/updatestatus', {
       orderId: orderId,
       status: status,
       reason: reason
@@ -31,8 +31,12 @@ export class ConsoleApiController {
   }
   static async isRestaurant() {
     await setHeaders()
-    const api = await backendInstance.post('/console/isrestaurant')
+    const api = await backendInstance.post('/dashboard/isrestaurant')
     if (api.status === 200) return true
     return false
+  }
+  static realTimeOrder(accessToken) {
+    backendInstance.defaults.headers['authorization'] = `Bearer ${accessToken}`
+    return url => backendInstance.post(url).then(res => res.data)
   }
 }

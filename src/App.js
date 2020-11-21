@@ -20,7 +20,7 @@ export default function App() {
       <Route exact path="/" component={() => <Home />} />
       <Route exact path="/redirect" component={() => <RedirectTo />} />
       <Route exact path="/logout" component={() => <Logout />} />
-      <Route path="/console" component={() => <DashBoardRoute />} />
+      <Route path="/dashboard" component={() => <DashBoardRoute />} />
       <Route path="/restaurant" component={() => <RestaurantRoute />} />
       <Route path="/payment" component={() => <PaymentRoute />} />
       <Route path="/order" component={() => <OrderRoute />} />
