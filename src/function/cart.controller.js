@@ -28,53 +28,37 @@ export class CartController {
       JSON.stringify(await promiseGetRecoil(atomCurrentRestaurant))
     )
   }
-  static async plusMenuUnit(menuObj, restaurantId) {
-    try {
-      await promiseSetRecoil(currentRestaurant, restaurantId)
-      const cart = await promiseGetRecoil(atomCart)
-      let foundIndex = cart.findIndex(x => x.menuId === menuObj.id)
-      if (foundIndex >= 0) {
-        await promiseSetRecoil(
-          atomCart,
-          cart.map((i, index) => {
-            if (index === foundIndex) {
-              return {
-                ...i,
-                unit: i.unit + 1
-              }
-            }
-            return i
-          })
-        )
-      } else {
-        await promiseSetRecoil(atomCart, [
-          ...cart,
-          {
-            menuId: menuObj.id,
-            name: menuObj.name,
-            note: '',
-            price: menuObj.price,
-            unit: 1,
-            img: menuObj.img,
-            restaurantId: menuObj.restaurantId
-          }
-        ])
-      }
-      await this.saveLocalStorage()
-    } catch (e) {
-      this.clear()
-    }
-  }
-  static async setOrderNote(noteText, menuId) {
+  static async addMenu(menuObj, unit, note, restaurantId) {
+    const id = Math.floor(Math.random() * 10 ** 16)
+    await promiseSetRecoil(currentRestaurant, restaurantId)
     const cart = await promiseGetRecoil(atomCart)
-    let foundIndex = cart.findIndex(x => x.menuId === menuId)
+    await promiseSetRecoil(atomCart, [
+      ...cart,
+      {
+        id: id,
+        menuId: menuObj.id,
+        name: menuObj.name,
+        note: note,
+        price: menuObj.price,
+        unit: unit,
+        img: menuObj.img,
+        restaurantId: menuObj.restaurantId
+      }
+    ])
+    await this.saveLocalStorage()
+  }
+  static async updateMenu(id, unit, note) {
+    if (unit === 0) return this.removeMenu(id)
+    const cart = await promiseGetRecoil(atomCart)
+    let foundIndex = cart.findIndex(x => x.id === id)
     await promiseSetRecoil(
       atomCart,
       cart.map((i, index) => {
         if (index === foundIndex) {
           return {
             ...i,
-            note: noteText
+            unit: unit,
+            note: note
           }
         }
         return i
@@ -82,11 +66,20 @@ export class CartController {
     )
     await this.saveLocalStorage()
   }
+  static async removeMenu(id) {
+    const cart = await promiseGetRecoil(atomCart)
+    let foundIndex = cart.findIndex(x => x.id === id)
+    await promiseSetRecoil(
+      atomCart,
+      cart.filter((i, index) => index !== foundIndex)
+    )
+    await this.saveLocalStorage()
+  }
   static getTotalPrice(cart) {
     let findMax = (prev, current) => {
       return prev + current.price * current.unit
     }
-    let total = (cart).reduce(findMax, 0)
+    let total = cart.reduce(findMax, 0)
     return total
   }
 }

@@ -1,47 +1,55 @@
 import React from 'react'
-import {
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Button
-} from '@chakra-ui/react'
+import { Button, Center } from '@chakra-ui/react'
 import { Stack, Text, Flex } from '@chakra-ui/react'
-export function Cart({ children, isOpen, onClose, btnRef, onClearBtn, onCheckoutBtn, total }) {
+import { ChakraDrawer } from '../ChakraDrawer'
+export function Cart({
+  children,
+  isOpen,
+  onOpen,
+  onClose,
+  btnRef,
+  onClearBtn,
+  onCheckoutBtn,
+  total
+}) {
+  function DrawerFooter() {
+    return (
+      <Stack borderTopWidth="1px">
+        <Flex>
+          <Text fontSize="lg" marginRight="auto">
+            Total
+          </Text>
+          <Text fontSize="lg" marginLeft="auto">
+            ฿{total}
+          </Text>
+        </Flex>
+        <Flex>
+          <Button variant="outline" mr={3} onClick={onClearBtn} w="20%">
+            Clear
+          </Button>
+          <Button colorScheme="blue" textColor="white" onClick={onCheckoutBtn} w="80%">
+            Checkout
+          </Button>
+        </Flex>
+      </Stack>
+    )
+  }
   return (
     <>
-      <Drawer isOpen={isOpen} onClose={onClose} finalFocusRef={btnRef} size="xl">
-        <DrawerOverlay>
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader>Cart</DrawerHeader>
-            <DrawerBody>{children}</DrawerBody>
-            <DrawerFooter borderTopWidth="1px">
-              <Stack>
-                <Flex>
-                  <Text fontSize="lg" marginRight="auto">
-                    Total
-                  </Text>
-                  <Text fontSize="lg" marginLeft="auto">
-                    ฿{total}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Button variant="outline" mr={3} onClick={onClearBtn}>
-                    Clear
-                  </Button>
-                  <Button colorScheme="blue" textColor="white" onClick={onCheckoutBtn}>
-                    Checkout
-                  </Button>
-                </Flex>
-              </Stack>
-            </DrawerFooter>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
+      <Flex justify="center" p={3}>
+        <Button ref={btnRef} bg="#38A169" color="white" onClick={onOpen} w="100%">
+          <Center>View Basket</Center>
+          <Text marginLeft="auto">{'฿' + total}</Text>
+        </Button>
+      </Flex>
+      <ChakraDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        btnRef={btnRef}
+        size="xl"
+        body={children}
+        footer={<DrawerFooter />}
+      />
     </>
   )
 }

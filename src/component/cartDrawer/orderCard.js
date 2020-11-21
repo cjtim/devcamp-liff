@@ -1,11 +1,35 @@
 import React from 'react'
-import { Flex, Text, Box, Image, Heading, Link, Input } from '@chakra-ui/react'
+import {
+  Flex,
+  Text,
+  Box,
+  Image,
+  Heading,
+  Input,
+  useDisclosure,
+  Center,
+  IconButton,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton
+} from '@chakra-ui/react'
+import { AddIcon, MinusIcon } from '@chakra-ui/icons'
+import { CartController } from '../../function/cart.controller'
 
-export function OrderCard({ id, name, note, price, img, unit, restaurantId, url, setNote }) {
+export function OrderCard({ id, menuId, name, note, price, img, unit, restaurantId }) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const btnRef = React.useRef()
+  const [newNote, setNewNote] = React.useState(note)
+  const [newUnit, setNewUnit] = React.useState(unit)
   return (
-    <Link href={url} style={{ textDecoration: 'none' }}>
-      <Flex justify="center">
-        <Box w="md" borderWidth="1px" rounded="lg" py={2} overflow="hidden" bg="white">
+    <>
+      <Flex justify="center" onClick={onOpen} py={2}>
+        <Box w="md" borderWidth="1px" rounded="lg" overflow="hidden" bg="white">
           <Flex alignContent="center" alignItems="center">
             <Box width="120px" height="100px">
               <Image
@@ -31,14 +55,61 @@ export function OrderCard({ id, name, note, price, img, unit, restaurantId, url,
               </Text>
             </Flex>
           </Flex>
-          <Input
-            placeholder="Note เช่น ไม่เผ็ด"
-            size="md"
-            value={note}
-            onChange={e => setNote(e.target.value, id)}
-          />
         </Box>
       </Flex>
-    </Link>
+      <Drawer isOpen={isOpen} placement="bottom" onClose={onClose} finalFocusRef={btnRef} size="md">
+        <DrawerOverlay>
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>
+              <Text fontSize="lg" fontWeight={700}>
+                {name}
+              </Text>
+            </DrawerHeader>
+
+            <DrawerBody>
+              <Center>
+                <IconButton
+                  m={2}
+                  colorScheme="teal"
+                  aria-label="Call Segun"
+                  size="md"
+                  icon={<MinusIcon />}
+                  onClick={() => (newUnit - 1 < 0 ? setNewNote(0) : setNewUnit(newUnit - 1))}
+                />
+                <Text fontSize="lg" fontWeight={700} px={3}>{` ${newUnit} `}</Text>
+                <IconButton
+                  m={2}
+                  colorScheme="teal"
+                  aria-label="Call Segun"
+                  size="md"
+                  icon={<AddIcon />}
+                  onClick={() => setNewUnit(newUnit + 1)}
+                />
+              </Center>
+              <Center>
+                <Input
+                  placeholder="note"
+                  value={newNote}
+                  onChange={e => setNewNote(e.target.value)}
+                ></Input>
+              </Center>
+            </DrawerBody>
+
+            <DrawerFooter>
+              <Button
+                w="100%"
+                onClick={() => {
+                  CartController.updateMenu(id, newUnit, newNote)
+                  onClose()
+                }}
+              >
+                {newUnit === 0 ? 'Remove item' : 'Update'}
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+    </>
   )
 }
