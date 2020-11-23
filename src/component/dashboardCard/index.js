@@ -21,8 +21,8 @@ export function DashBoardOrderCard({
             <CustomDivider />
             <Center minW="20rem">
               <Flex flexDir="column">
-                {selectedMenu.map(i => {
-                  return <div>{"- " + i.name + ": " + i.note + ", จำนวน: "+ i.unit}</div>
+                {selectedMenu.map((i, index) => {
+                  return <div key={index}>{"- " + i.name + ": " + i.note + ", จำนวน: "+ i.unit}</div>
                 })}
               </Flex>
             </Center>

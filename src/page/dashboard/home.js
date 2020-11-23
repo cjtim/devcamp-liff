@@ -3,16 +3,18 @@ import { ConsoleApiController } from '../../function/consoleapi.controller'
 import { LoadingAnimation } from '../../component/loadingAnimation'
 import { DashBoardOrderCard } from '../../component/dashboardCard'
 import { useHistory } from 'react-router-dom'
-import useSWR from 'swr'
 
-export function DashBoardHome({ liffAccessToken }) {
-  const { data, error } = useSWR('/dashboard/activeorder', ConsoleApiController.realTimeOrder(liffAccessToken), { refreshInterval: 5000 })
-  if (error) {
-    let history = useHistory()
+export function DashBoardHome() {
+  let history = useHistory()
+  const { data, error, isRestaurant, isLoading } = ConsoleApiController.realTimeOrder()
+  if (!isRestaurant) {
     alert('You are not restaurant account')
     history.push('/')
   }
-  if (!data && !error) return <LoadingAnimation />
+  if (error) {
+    history.push('/')
+  }
+  if (isLoading) return <LoadingAnimation />
   if (data.length === 0) return "no new order"
   return (
     <>

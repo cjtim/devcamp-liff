@@ -1,5 +1,6 @@
 import liff from '@line/liff'
 import axios from 'axios'
+import useSWR from 'swr'
 
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
@@ -35,8 +36,17 @@ export class ConsoleApiController {
     if (api.status === 200) return true
     return false
   }
-  static realTimeOrder(accessToken) {
-    backendInstance.defaults.headers['authorization'] = `Bearer ${accessToken}`
-    return url => backendInstance.post(url).then(res => res.data)
+  static realTimeOrder() {
+    const { data, error } = useSWR('/dashboard/activeorder', this.getActiveOrder, {
+      refreshInterval: 5000
+    })
+    const isLoading = !data && !error
+    const isRestaurant = !(error && error.status === 403)
+    return {
+      data: data,
+      error: error,
+      isLoading: isLoading,
+      isRestaurant: isRestaurant
+    }
   }
 }
