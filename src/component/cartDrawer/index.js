@@ -5,12 +5,14 @@ import { CartController } from '../../function/cart.controller'
 import { useRecoilValue } from 'recoil'
 import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
 import { OrderCard } from './orderCard'
-import { ApiController } from '../../function/api.controller'
+import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
+import { ApiController } from '../../function/api.controller'
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
+  const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
@@ -20,11 +22,22 @@ export default function CartDrawer() {
   }
 
   async function onCheckoutBtn() {
+    setIsCheckout(true)
+    // setIsLoading(false)
+  }
+  async function payWithSCB() {
     setIsLoading(true)
     const deepLink = await ApiController.checkout(cart, currentRestaurant)
     window.open(deepLink)
     CartController.clear()
-    setIsLoading(false)
+    window.location.reload()
+  }
+  async function bypassPayment() {
+    setIsLoading(true)
+    const deepLink = await ApiController.checkout(cart, currentRestaurant, true)
+    window.open(deepLink)
+    CartController.clear()
+    window.location.reload()
   }
 
   if (cart.length > 0)
@@ -57,6 +70,14 @@ export default function CartDrawer() {
               )
             })}
           {!cart && !isLoading && 'Cart is empty'}
+          {isCheckout && (
+            <AskPaymentMethod
+              isOpen={isCheckout}
+              setIsOpen={setIsCheckout}
+              bypassPayment={bypassPayment}
+              payWithSCB={payWithSCB}
+            />
+          )}
         </Cart>
       </>
     )
