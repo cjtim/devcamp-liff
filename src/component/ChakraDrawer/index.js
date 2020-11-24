@@ -9,7 +9,7 @@ import {
   DrawerCloseButton
 } from '@chakra-ui/react'
 
-export function ChakraDrawer({ header, body, footer, isOpen, onClose, btnRef, placement, size }) {
+export function ChakraDrawer({ header, children, footer, isOpen, onClose, btnRef, placement, size }) {
   return (
     <Drawer
       isOpen={isOpen}
@@ -23,7 +23,7 @@ export function ChakraDrawer({ header, body, footer, isOpen, onClose, btnRef, pl
           <DrawerCloseButton />
           <DrawerHeader>{header}</DrawerHeader>
 
-          <DrawerBody>{body}</DrawerBody>
+          <DrawerBody>{children}</DrawerBody>
 
           <DrawerFooter>{footer}</DrawerFooter>
         </DrawerContent>

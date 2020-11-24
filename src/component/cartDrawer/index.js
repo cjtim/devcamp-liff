@@ -1,6 +1,19 @@
 import React from 'react'
-import { useDisclosure } from '@chakra-ui/react'
-import { Cart } from './cartDrawer'
+import {
+  useDisclosure,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Flex,
+  Button,
+  Center,
+  Text,
+  Stack
+} from '@chakra-ui/react'
 import { CartController } from '../../function/cart.controller'
 import { useRecoilValue } from 'recoil'
 import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
@@ -14,8 +27,14 @@ export default function CartDrawer() {
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
+
+  function GetTotalPrice() {
+    const total = CartController.getTotalPrice(cart)
+    return <>{total}</>
+  }
   async function onClearBtn() {
     onClose()
     CartController.clear()
@@ -23,12 +42,13 @@ export default function CartDrawer() {
 
   async function onCheckoutBtn() {
     setIsCheckout(true)
-    // setIsLoading(false)
+    setIsLoading(false)
   }
   async function payWithSCB() {
     setIsLoading(true)
     const deepLink = await ApiController.checkout(cart, currentRestaurant)
     window.open(deepLink)
+    setIsLoading(false)
     CartController.clear()
     window.location.reload()
   }
@@ -36,6 +56,7 @@ export default function CartDrawer() {
     setIsLoading(true)
     const deepLink = await ApiController.checkout(cart, currentRestaurant, true)
     window.open(deepLink)
+    setIsLoading(false)
     CartController.clear()
     window.location.reload()
   }
@@ -43,42 +64,79 @@ export default function CartDrawer() {
   if (cart.length > 0)
     return (
       <>
-        <Cart
+        <Flex justify="center" p={3}>
+          <Button ref={btnRef} bg="#38A169" color="white" onClick={onOpen} w="100%">
+            <Center>View Basket</Center>
+            <Text marginLeft="auto">
+              {'฿'}
+              {<GetTotalPrice />}
+            </Text>
+          </Button>
+        </Flex>
+        <Drawer
           isOpen={isOpen}
-          onOpen={onOpen}
+          placement="right"
           onClose={onClose}
-          btnRef={btnRef}
-          onClearBtn={onClearBtn}
-          onCheckoutBtn={onCheckoutBtn}
-          total={CartController.getTotalPrice(cart)}
+          finalFocusRef={btnRef}
+          size="xl"
         >
-          {isLoading && <LoadingAnimation height="50%" />}
-          {!isLoading &&
-            cart &&
-            cart.map((i, index) => {
-              return (
-                <OrderCard
-                  key={index}
-                  name={i.name}
-                  id={i.id}
-                  menuId={i.menuId}
-                  img={i.img}
-                  note={i.note}
-                  price={i.price}
-                  unit={i.unit}
-                />
-              )
-            })}
-          {!cart && !isLoading && 'Cart is empty'}
-          {isCheckout && (
-            <AskPaymentMethod
-              isOpen={isCheckout}
-              setIsOpen={setIsCheckout}
-              bypassPayment={bypassPayment}
-              payWithSCB={payWithSCB}
-            />
-          )}
-        </Cart>
+          <DrawerOverlay>
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>My Basket{' ชื่อร้านอาหาร'}</DrawerHeader>
+
+              <DrawerBody>
+                {isLoading && <LoadingAnimation height="50%" />}
+                {!isLoading &&
+                  cart &&
+                  cart.map((i, index) => {
+                    return (
+                      <OrderCard
+                        key={index}
+                        name={i.name}
+                        id={i.id}
+                        menuId={i.menuId}
+                        img={i.img}
+                        note={i.note}
+                        price={i.price}
+                        unit={i.unit}
+                      />
+                    )
+                  })}
+                {!cart && !isLoading && 'Cart is empty'}
+                {isCheckout && (
+                  <AskPaymentMethod
+                    isOpen={isCheckout}
+                    setIsOpen={setIsCheckout}
+                    bypassPayment={bypassPayment}
+                    payWithSCB={payWithSCB}
+                  />
+                )}
+              </DrawerBody>
+
+              <DrawerFooter borderTopWidth="1px">
+                <Stack w="100%">
+                  <Flex>
+                    <Text fontSize="lg" marginRight="auto">
+                      Total
+                    </Text>
+                    <Text fontSize="lg" marginLeft="auto">
+                      ฿{<GetTotalPrice />}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Button variant="outline" mr={3} onClick={onClearBtn} w="20%">
+                      Clear
+                    </Button>
+                    <Button colorScheme="blue" textColor="white" onClick={onCheckoutBtn} w="80%">
+                      Checkout
+                    </Button>
+                  </Flex>
+                </Stack>
+              </DrawerFooter>
+            </DrawerContent>
+          </DrawerOverlay>
+        </Drawer>
       </>
     )
   return ''
