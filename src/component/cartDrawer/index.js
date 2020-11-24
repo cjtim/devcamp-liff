@@ -35,30 +35,13 @@ export default function CartDrawer() {
     const total = CartController.getTotalPrice(cart)
     return <>{total}</>
   }
-  async function onClearBtn() {
-    onClose()
-    CartController.clear()
-  }
 
-  async function onCheckoutBtn() {
-    setIsCheckout(true)
-    setIsLoading(false)
-  }
-  async function payWithSCB() {
+  async function checkout(bypass = false) {
     setIsLoading(true)
-    const deepLink = await ApiController.checkout(cart, currentRestaurant)
+    const deepLink = await ApiController.checkout(cart, currentRestaurant, bypass)
     window.open(deepLink)
     setIsLoading(false)
     CartController.clear()
-    window.location.reload()
-  }
-  async function bypassPayment() {
-    setIsLoading(true)
-    const deepLink = await ApiController.checkout(cart, currentRestaurant, true)
-    window.open(deepLink)
-    setIsLoading(false)
-    CartController.clear()
-    window.location.reload()
   }
 
   if (cart.length > 0)
@@ -104,14 +87,7 @@ export default function CartDrawer() {
                     )
                   })}
                 {!cart && !isLoading && 'Cart is empty'}
-                {isCheckout && (
-                  <AskPaymentMethod
-                    isOpen={isCheckout}
-                    setIsOpen={setIsCheckout}
-                    bypassPayment={bypassPayment}
-                    payWithSCB={payWithSCB}
-                  />
-                )}
+                {isCheckout && <AskPaymentMethod setIsOpen={setIsCheckout} checkout={checkout} />}
               </DrawerBody>
 
               <DrawerFooter borderTopWidth="1px">
@@ -125,10 +101,15 @@ export default function CartDrawer() {
                     </Text>
                   </Flex>
                   <Flex>
-                    <Button variant="outline" mr={3} onClick={onClearBtn} w="20%">
+                    <Button variant="outline" mr={3} onClick={() => CartController.clear()} w="20%">
                       Clear
                     </Button>
-                    <Button colorScheme="blue" textColor="white" onClick={onCheckoutBtn} w="80%">
+                    <Button
+                      colorScheme="blue"
+                      textColor="white"
+                      onClick={() => setIsCheckout(true)}
+                      w="80%"
+                    >
                       Checkout
                     </Button>
                   </Flex>

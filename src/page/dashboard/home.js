@@ -15,7 +15,8 @@ export function DashBoardHome() {
     history.push('/')
   }
   if (isLoading) return <LoadingAnimation />
-  if (data.length === 0) return "no new order"
+  if (data && data.length === 0) return "no new order"
+  
   return (
     <>
       {data && 

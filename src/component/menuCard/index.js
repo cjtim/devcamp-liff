@@ -20,7 +20,6 @@ import {
 } from '@chakra-ui/react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import { CartController } from '../../function/cart.controller'
-import { ChakraDrawer } from '../ChakraDrawer'
 
 export function MenuCard({ menu }) {
   const [unit, setUnit] = useState(1)
@@ -31,7 +30,6 @@ export function MenuCard({ menu }) {
   async function addToBasket(menu, unit, note) {
     try {
       await CartController.addMenu(menu, unit, note, menu.restaurantId)
-      onClose()
     } catch (e) {
       CartController.clear()
     }
@@ -102,6 +100,7 @@ export function MenuCard({ menu }) {
                 size="md"
                 width="100%"
                 onClick={() => {
+                  onClose()
                   addToBasket(menu, unit, note, menu.restaurantId)
                   setUnit(1)
                   setNote('')

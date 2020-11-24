@@ -8,41 +8,34 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
   Button,
-  useDisclosure
 } from '@chakra-ui/react'
 
-export function AskPaymentMethod({ isOpen, setIsOpen, payWithSCB, bypassPayment }) {
-  const { onClose } = useDisclosure()
+export function AskPaymentMethod({ setIsOpen, checkout }) {
   const cancelRef = React.useRef()
-
-  function close() {
-    onClose()
-    setIsOpen(false)
-  }
 
   return (
     <>
       <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
-        onClose={() => close()}
-        onOverlayClick={() => close()}
-        onEsc={() => close()}
-        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onOverlayClick={() => setIsOpen(false)}
+        onEsc={() => setIsOpen(false)}
+        isOpen={true}
         isCentered
       >
         <AlertDialogOverlay />
 
         <AlertDialogContent>
           <AlertDialogHeader>Bypass Payment?</AlertDialogHeader>
-          <AlertDialogCloseButton/>
+          <AlertDialogCloseButton />
           <AlertDialogBody>Do you want to skip payment system?</AlertDialogBody>
           <AlertDialogFooter>
             <Button
               colorScheme="red"
               onClick={() => {
-                close()
-                bypassPayment()
+                setIsOpen(false)
+                checkout(true)
               }}
             >
               Bypass (Guest)
@@ -50,8 +43,8 @@ export function AskPaymentMethod({ isOpen, setIsOpen, payWithSCB, bypassPayment 
             <Button
               ref={cancelRef}
               onClick={() => {
-                close()
-                payWithSCB()
+                setIsOpen(false)
+                checkout(false)
               }}
               ml={3}
             >
