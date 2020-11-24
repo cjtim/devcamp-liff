@@ -38,10 +38,11 @@ export default function CartDrawer() {
 
   async function checkout(bypass = false) {
     setIsLoading(true)
-    const deepLink = await ApiController.checkout(cart, currentRestaurant, bypass)
-    window.open(deepLink)
-    setIsLoading(false)
-    CartController.clear()
+    ApiController.checkout(cart, currentRestaurant, bypass).then(deepLink => {
+      window.open(deepLink)
+      setIsLoading(false)
+      CartController.clear()
+    })
   }
 
   if (cart.length > 0)
