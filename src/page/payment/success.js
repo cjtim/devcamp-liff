@@ -3,15 +3,23 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import SuccessLogo from './../../component/icon/success'
 import { LoadingAnimation } from './../../component/loadingAnimation'
-import { ApiController } from '../../function/api.controller'
+import liff from '@line/liff'
+import axios from 'axios'
 
+const backendInstance = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_URL
+})
 export function PaymentSuccess() {
   const { transactionId } = useParams()
   const [isLoading, setisLoading] = useState(false)
   useEffect(() => {
     ;(async () => {
       setisLoading(true)
-      const isPaid = await ApiController.transactionIsPaid(transactionId)
+      await liff.ready
+      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+      const isPaid = (await backendInstance.post('/transaction/ispaid', {
+        transactionId: transactionId
+      })).data.paid
       if (isPaid === false) {
         window.location.href = window.location.href.replace('success', 'failed')
       }

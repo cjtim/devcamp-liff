@@ -2,15 +2,23 @@ import { Box } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { RestaurantCard } from '../../component/restaurantCard'
 import { LoadingAnimation } from '../../component/loadingAnimation'
-import { ApiController } from '../../function/api.controller'
+import liff from '@line/liff'
+import axios from 'axios'
+
+const backendInstance = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_URL
+})
 
 export function RestaurantHome() {
   const [isLoading, setIsLoading] = useState(true)
   const [restaurantPayload, setrestaurantPayload] = useState(undefined)
   useEffect(() => {
-    ApiController.restaurantList().then(data => {
-      setrestaurantPayload(data)
-      setIsLoading(false)
+    liff.ready.then(() => {
+      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+      backendInstance.post('/restaurant/list').then(res => {
+        setrestaurantPayload(res.data)
+        setIsLoading(false)
+      })
     })
   }, [])
   if (isLoading) return <LoadingAnimation />
