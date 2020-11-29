@@ -9,10 +9,15 @@ import { RestaurantRoute } from './page/restaurant'
 import { OrderRoute } from './page/order'
 import { CartController } from './function/cart.controller'
 import { DashBoardRoute } from './page/dashboard'
+import { useSetRecoilState } from 'recoil'
+import { lineAcctoken } from './recoil'
 
 export default function App() {
+  const setLineAccToken = useSetRecoilState(lineAcctoken)
   useEffect(() => {
-    liffLogin()
+    liffLogin().then(() => {
+      setLineAccToken(liff.getAccessToken())
+    })
     CartController.load()
   }, [])
   return (

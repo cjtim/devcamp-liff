@@ -1,37 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { LoadingAnimation } from '../../component/loadingAnimation'
 import { useParams } from 'react-router-dom'
 import { PageLayout } from '../../component/pageLayout'
 import { MenuCard } from '../../component/menuCard'
-import liff from '@line/liff'
-import axios from 'axios'
+import { useAPI } from '../../function/api'
 
-const backendInstance = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL
-})
 
 export function RestaurantMenu() {
   let { restaurantId } = useParams()
-  const [isLoading, setIsLoading] = useState(true)
-  const [menuPayload, setMenuPayload] = useState([])
-  useEffect(() => {
-    liff.ready.then(() => {
-      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-      backendInstance
-        .post('/menu/list', {
-          restaurantId: restaurantId
-        })
-        .then(res => {
-          setMenuPayload(res.data)
-          setIsLoading(false)
-        })
-    })
-  }, [])
+  const { data, isLoading } = useAPI('/menu/list', {
+    restaurantId: restaurantId
+  })
+
   if (isLoading) return <LoadingAnimation />
   return (
     <PageLayout>
-      {menuPayload &&
-        menuPayload.map((menu, index) => {
+      {data &&
+        data.map((menu, index) => {
           return <MenuCard key={index} menu={menu} />
         })}
     </PageLayout>
