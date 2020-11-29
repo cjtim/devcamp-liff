@@ -48,33 +48,43 @@ export default function CartDrawer() {
     return <>{total}</>
   }
 
-  async function checkout(bypass = false) {
+  function checkout(bypass = false) {
     setIsLoading(true)
     let deepLink
-    const payload = await backendInstance.post('/order/create', {
-      selectedMenu: cart.map(object => ({ ...object })),
-      restaurantId: currentRestaurant
-    })
-    console.log(payload.data)
-    const scb = await backendInstance.post('/transaction/create', {
-      payAmount: payload.data.totalAmount,
-      orderId: payload.data.id,
-      bypass: bypass
-    })
-    console.log(scb.data)
-
-    if (bypass) {
-      await backendInstance.post('/scb/webhook', {
-        transactionId: scb.data.transactionId,
-        bypass: bypass
+    backendInstance
+      .post('/order/create', {
+        selectedMenu: cart.map(object => ({ ...object })),
+        restaurantId: currentRestaurant
       })
-      const index = scb.data.deeplinkUrl.indexOf('?callback_url=') + 14
-      deepLink = scb.data.deeplinkUrl.substring(index)
-    }
-    deepLink = scb.data.deeplinkUrl
-    window.open(deepLink)
-    setIsLoading(false)
-    CartController.clear()
+      .then(res => {
+        console.log(res.data)
+        backendInstance
+          .post('/transaction/create', {
+            payAmount: res.data.totalAmount,
+            orderId: res.data.id,
+            bypass: bypass
+          })
+          .then(res => {
+            console.log(res.data)
+            deepLink = res.data.deeplinkUrl
+            if (bypass) {
+              backendInstance.post('/scb/webhook', {
+                transactionId: res.data.transactionId,
+                bypass: bypass
+              }).then((res) => {
+                const index = deepLink.indexOf('?callback_url=') + 14
+                window.open(deepLink.substring(index))
+              })
+            } else {
+              window.open(deepLink)
+            }
+            setIsLoading(false)
+            CartController.clear()
+          }).catch(e => {
+            console.log(e)
+          })
+      })
+
   }
 
   if (cart.length > 0)
