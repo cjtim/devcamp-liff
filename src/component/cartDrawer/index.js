@@ -32,15 +32,13 @@ export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
 
   React.useEffect(() => {
-    liff.ready.then(() => {
-      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-    })
+    liff.ready.then(() => setIsLoading(false))
   }, [])
 
   function GetTotalPrice() {
@@ -50,6 +48,7 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
+    backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
     let deepLink
     backendInstance
       .post('/order/create', {
