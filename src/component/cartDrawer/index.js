@@ -20,7 +20,13 @@ import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '..
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
-import { ApiController } from '../../function/api.controller'
+
+import liff from '@line/liff'
+import axios from 'axios'
+
+const backendInstance = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_URL
+})
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
@@ -31,6 +37,12 @@ export default function CartDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
 
+  React.useEffect(() => {
+    liff.ready.then(() => {
+      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+    })
+  }, [])
+
   function GetTotalPrice() {
     const total = CartController.getTotalPrice(cart)
     return <>{total}</>
@@ -38,11 +50,31 @@ export default function CartDrawer() {
 
   async function checkout(bypass = false) {
     setIsLoading(true)
-    ApiController.checkout(cart, currentRestaurant, bypass).then(deepLink => {
-      window.open(deepLink)
-      setIsLoading(false)
-      CartController.clear()
+    let deepLink
+    const payload = await backendInstance.post('/order/create', {
+      selectedMenu: cart.map(object => ({ ...object })),
+      restaurantId: currentRestaurant
     })
+    console.log(payload.data)
+    const scb = await backendInstance.post('/transaction/create', {
+      payAmount: payload.data.totalAmount,
+      orderId: payload.data.id,
+      bypass: bypass
+    })
+    console.log(scb.data)
+
+    if (bypass) {
+      await backendInstance.post('/scb/webhook', {
+        transactionId: scb.data.transactionId,
+        bypass: bypass
+      })
+      const index = scb.data.deeplinkUrl.indexOf('?callback_url=') + 14
+      deepLink = scb.data.deeplinkUrl.substring(index)
+    }
+    deepLink = scb.data.deeplinkUrl
+    window.open(deepLink)
+    setIsLoading(false)
+    CartController.clear()
   }
 
   if (cart.length > 0)
