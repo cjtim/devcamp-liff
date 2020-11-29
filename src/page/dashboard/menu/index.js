@@ -24,7 +24,7 @@ function MenuHome() {
   const [menuPayload, setMenuPayload] = useState(undefined)
   useEffect(() => {
     ;(async () => {
-      await liff.read
+      await liff.ready
       const restaurantId = (
         await backendInstance.post('/restaurant/getbylineuid', {
           lineUid: (await liff.getProfile()).userId
