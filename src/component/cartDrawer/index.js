@@ -25,25 +25,18 @@ import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
 import bent from 'bent'
-import liff from '@line/liff'
+// import liff from '@line/liff'
 const getJSON = bent(process.env.REACT_APP_BACKEND_URL, 'json', 'POST')
 const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
-export default function CartDrawer() {
+export function CartDrawer() {
   const cart = useRecoilValue(atomCart)
-  const [lineAccToken, setLineAccToken] = useRecoilState(atomLineAccToken)
+  const lineAccToken = useRecoilValue(atomLineAccToken)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
-
-  React.useEffect(() => {
-    liff.ready.then(() => {
-      alert("CartDrawer liff is ready")
-      setLineAccToken(liff.getAccessToken())
-    })
-  }, [])
 
   function GetTotalPrice() {
     const total = CartController.getTotalPrice(cart)
@@ -52,8 +45,7 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    alert("Checking out line acc token is: " + lineAccToken)
-    // setLineAccToken(lineAccToken)
+    alert('Checking out line acc token is: ' + lineAccToken)
     createOrder(cart, currentRestaurant, lineAccToken, bypass)
       .then(order => {
         console.log(order)
