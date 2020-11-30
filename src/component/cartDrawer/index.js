@@ -16,12 +16,13 @@ import {
 } from '@chakra-ui/react'
 import { CartController } from '../../function/cart.controller'
 import { useRecoilValue } from 'recoil'
-import { cart as atomCart, currentRestaurant as atomCurrentRestaurant, lineAcctoken } from '../../recoil'
+import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
 
 import axios from 'axios'
+import liff from '@line/liff/dist/lib'
 
 const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
@@ -30,7 +31,6 @@ const backendInstance = axios.create({
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
-  const lineAccToken = useRecoilValue(lineAcctoken)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
 
@@ -42,46 +42,50 @@ export default function CartDrawer() {
     return <>{total}</>
   }
 
-  async function checkout(bypass = false) {
+  function checkout(bypass = false) {
     setIsLoading(true)
-    backendInstance.defaults.headers['authorization'] = `Bearer ${lineAccToken}`
-    let deepLink
-    backendInstance
-      .post('/order/create', {
-        selectedMenu: cart.map(object => ({ ...object })),
-        restaurantId: currentRestaurant
-      })
-      .then(res => {
-        console.log(res.data)
+    liff.ready
+      .then(() => {
+        backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+        let deepLink
         backendInstance
-          .post('/transaction/create', {
-            payAmount: res.data.totalAmount,
-            orderId: res.data.id,
-            bypass: bypass
+          .post('/order/create', {
+            selectedMenu: cart.map(object => ({ ...object })),
+            restaurantId: currentRestaurant
           })
           .then(res => {
             console.log(res.data)
-            deepLink = res.data.deeplinkUrl
-            if (bypass) {
-              backendInstance
-                .post('/scb/webhook', {
-                  transactionId: res.data.transactionId,
-                  bypass: bypass
-                })
-                .then(res => {
-                  const index = deepLink.indexOf('?callback_url=') + 14
-                  window.open(deepLink.substring(index))
+            backendInstance
+              .post('/transaction/create', {
+                payAmount: res.data.totalAmount,
+                orderId: res.data.id,
+                bypass: bypass
+              })
+              .then(res => {
+                console.log(res.data)
+                deepLink = res.data.deeplinkUrl
+                if (bypass) {
+                  backendInstance
+                    .post('/scb/webhook', {
+                      transactionId: res.data.transactionId,
+                      bypass: bypass
+                    })
+                    .then(res => {
+                      const index = deepLink.indexOf('?callback_url=') + 14
+                      window.open(deepLink.substring(index))
+                      setIsLoading(false)
+                    })
+                } else {
+                  window.open(deepLink)
                   setIsLoading(false)
-                })
-            } else {
-              window.open(deepLink)
-              setIsLoading(false)
-            }
-            CartController.clear()
+                }
+                CartController.clear()
+              })
           })
-          .catch(e => {
-            console.log(e)
-          })
+      })
+      .catch(e => {
+        alert(e.message)
+        console.log(e)
       })
   }
 
