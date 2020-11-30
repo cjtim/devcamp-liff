@@ -16,24 +16,23 @@ import {
 } from '@chakra-ui/react'
 import { CartController } from '../../function/cart.controller'
 import { useRecoilValue } from 'recoil'
-import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
+import {
+  cart as atomCart,
+  currentRestaurant as atomCurrentRestaurant
+  // lineAcctoken as atomLineAccToken
+} from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
+import bent from 'bent'
+const getJSON = bent(process.env.REACT_APP_BACKEND_URL, 'json', 'POST')
+const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
-import axios from 'axios'
-import liff from '@line/liff/dist/lib'
-
-const backendInstance = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL
-})
-
-export default function CartDrawer() {
+export function CartDrawer() {
   const cart = useRecoilValue(atomCart)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
-
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
 
@@ -44,47 +43,21 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    liff.ready
-      .then(() => {
-        backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-        let deepLink
-        backendInstance
-          .post('/order/create', {
-            selectedMenu: cart.map(object => ({ ...object })),
-            restaurantId: currentRestaurant
-          })
-          .then(res => {
-            console.log(res.data)
-            backendInstance
-              .post('/transaction/create', {
-                payAmount: res.data.totalAmount,
-                orderId: res.data.id,
-                bypass: bypass
-              })
-              .then(res => {
-                console.log(res.data)
-                deepLink = res.data.deeplinkUrl
-                if (bypass) {
-                  backendInstance
-                    .post('/scb/webhook', {
-                      transactionId: res.data.transactionId,
-                      bypass: bypass
-                    })
-                    .then(res => {
-                      const index = deepLink.indexOf('?callback_url=') + 14
-                      window.open(deepLink.substring(index))
-                      setIsLoading(false)
-                    })
-                } else {
-                  window.open(deepLink)
-                  setIsLoading(false)
-                }
-                CartController.clear()
-              })
-          })
+    const accToken = localStorage.getItem('lineToken')
+    alert('Checking out line acc token is: ' + accToken)
+    createOrder(cart, currentRestaurant, accToken, bypass)
+      .then(order => {
+        console.log(order)
+        createTransaction(order, accToken, bypass).then(deepLink => {
+          console.log(deepLink)
+          window.open(deepLink, '_blank')
+          CartController.clear()
+          setIsLoading(false)
+        })
       })
       .catch(e => {
-        alert(e.message)
+        setIsLoading(false)
+        alert(e)
         console.log(e)
       })
   }
@@ -166,4 +139,40 @@ export default function CartDrawer() {
       </>
     )
   return ''
+}
+
+async function createOrder(cart, currentRestaurant, accToken, bypass = false) {
+  return await getJSON(
+    '/order/create',
+    {
+      selectedMenu: cart.map(object => ({ ...object })),
+      restaurantId: currentRestaurant
+    },
+    {
+      authorization: `Bearer ${accToken}`
+    }
+  )
+}
+async function createTransaction(order, accToken, bypass = false) {
+  const transaction = await getJSON(
+    '/transaction/create',
+    {
+      payAmount: order.totalAmount,
+      orderId: order.id,
+      bypass: bypass
+    },
+    {
+      authorization: `Bearer ${accToken}`
+    }
+  )
+  let deepLink = transaction.deeplinkUrl
+  if (bypass) {
+    getString('/scb/webhook', {
+      transactionId: transaction.transactionId,
+      bypass: bypass
+    })
+    const index = deepLink.indexOf('?callback_url=') + 14
+    deepLink = deepLink.substring(index)
+  }
+  return deepLink
 }

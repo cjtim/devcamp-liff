@@ -17,6 +17,7 @@ export default function App() {
   const setLineAccToken = useSetRecoilState(lineAcctoken)
   useEffect(() => {
     liffLogin().then(() => {
+      localStorage.setItem('lineToken', liff.getAccessToken())
       setLineAccToken(liff.getAccessToken())
     })
     CartController.load()
