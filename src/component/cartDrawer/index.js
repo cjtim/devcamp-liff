@@ -52,14 +52,13 @@ export default function CartDrawer() {
           console.log(deepLink)
           window.open(deepLink, '_blank')
           CartController.clear()
+          setIsLoading(false)
         })
       })
       .catch(e => {
-        alert(e.message)
-        console.log(e)
-      })
-      .finally(() => {
         setIsLoading(false)
+        alert(e)
+        console.log(e)
       })
   }
 

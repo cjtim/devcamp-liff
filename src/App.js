@@ -11,14 +11,24 @@ import { CartController } from './function/cart.controller'
 import { DashBoardRoute } from './page/dashboard'
 import { RegisterRoute } from './page/register'
 import { useSetRecoilState } from 'recoil'
-import { lineAcctoken } from './recoil'
+import {
+  lineAcctoken,
+  cart as atomCart,
+  currentRestaurant as atomCurrentRestaurant
+} from './recoil'
 
 export default function App() {
   const setLineAccToken = useSetRecoilState(lineAcctoken)
+  const setCart = useSetRecoilState(atomCart)
+  const setCurrentRestaurant = useSetRecoilState(atomCurrentRestaurant)
   useEffect(() => {
     liffLogin().then(() => {
       setLineAccToken(liff.getAccessToken())
     })
+    const localCart = localStorage.getItem('cart')
+    if (localCart) setCart(JSON.parse(localCart))
+    const localCurrentRestaurant = localStorage.getItem('currentRestaurant')
+    if (localCurrentRestaurant) setCurrentRestaurant(JSON.parse(localCurrentRestaurant))
     CartController.load()
   }, [])
   return (
