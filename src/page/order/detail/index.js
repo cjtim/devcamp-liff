@@ -39,7 +39,7 @@ function OrderDetail(){
     if(!isLoading){
         return(
             <Container maxW="md" paddingLeft = "0px" paddingRight="0px">
-                <Text fontWeight="bold" fontSize="3xl">Order Receipt</Text>
+                <Text fontWeight="bold" fontSize="3xl" marginLeft="10px">Order Receipt</Text>
                 <Stack>
                     <Box p={5} borderWidth="1px">
                         <HStack spacing="24px">
@@ -53,19 +53,25 @@ function OrderDetail(){
                             {orderReceipt.selectedMenu.map((i, index) => {
                                 return(
                                     <Flex paddingTop="10px" key={index}>
+                                        <Box marginRight="10px">{i.unit}x</Box>
                                         <Box>{i.name}</Box>
                                         <Spacer/>
-                                        <Box>{i.unit} x</Box>
+                                        <Box>฿{i.price}</Box>
                                     </Flex>
                                 )
                             })}
+                        <Divider marginTop="20px"/>    
                     </Box>
-
                     <Box p={5}>
+                        <Flex>
+                        <Box>Unit:</Box>
+                            <Spacer/>
+                            <Box>{orderReceipt.selectedMenu.length}</Box>
+                        </Flex>
                         <Flex>
                             <Box>Total:</Box>
                             <Spacer/>
-                        <Box>{orderReceipt.Transactions[0].amount} บาท</Box>
+                        <Box>฿{orderReceipt.Transactions[0].amount}</Box>
                         </Flex>
                     </Box>
                 </Stack>
@@ -74,4 +80,3 @@ function OrderDetail(){
     }
     return <LoadingAnimation/>
 }
-
