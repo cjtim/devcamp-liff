@@ -22,20 +22,32 @@ function OrderDetail(){
     const [isLoading, setISLoading] = useState(true)
     const [orderReceipt, setOrderReceipt] = useState([])
     useEffect(() => {
-        ;(async () =>{
-            try{
-                await liff.ready
-                backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-                const api = await backendInstance.post('order/get', {orderId})
-                console.log(api.data)
-                setOrderReceipt(api.data)
+        liff.ready.then(() => {
+            backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+            backendInstance.post('order/get', {orderId}).then((res) => {
+                setOrderReceipt(res.data)
+                console.log(res.data)
                 setISLoading(false)
-            } catch (err){
-                setISLoading(false)
-                console.log(err.message)
-            }
-        })()
+            })
+        }).catch((err) => {
+            setISLoading(false)
+            console.log(err.message)
+        })
     }, [])
+    //     ;(async () =>{
+    //         try{
+    //             await liff.ready
+    //             backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+    //             const api = await backendInstance.post('order/get', {orderId})
+    //             console.log(api.data)
+    //             setOrderReceipt(api.data)
+    //             setISLoading(false)
+    //         } catch (err){
+    //             setISLoading(false)
+    //             console.log(err.message)
+    //         }
+    //     })()
+    // }, [])
     if(!isLoading){
         return(
             <Container maxW="md" paddingLeft = "0px" paddingRight="0px">
@@ -71,7 +83,7 @@ function OrderDetail(){
                         <Flex>
                             <Box>Total:</Box>
                             <Spacer/>
-                        <Box>฿{orderReceipt.Transactions[0].amount}</Box>
+                        {/* <Box>฿{orderReceipt.Transactions[0].amount}</Box> */}
                         </Flex>
                     </Box>
                 </Stack>
