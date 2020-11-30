@@ -15,11 +15,11 @@ import {
   Stack
 } from '@chakra-ui/react'
 import { CartController } from '../../function/cart.controller'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilState } from 'recoil'
 import {
   cart as atomCart,
   currentRestaurant as atomCurrentRestaurant,
-  // lineAcctoken as atomLineAccToken
+  lineAcctoken as atomLineAccToken
 } from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
@@ -31,12 +31,19 @@ const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
-  // const [lineAccToken, setLineAccToken] = useRecoilState(atomLineAccToken)
+  const [lineAccToken, setLineAccToken] = useRecoilState(atomLineAccToken)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
+
+  React.useEffect(() => {
+    liff.ready.then(() => {
+      alert("CartDrawer liff is ready")
+      setLineAccToken(liff.getAccessToken())
+    })
+  }, [])
 
   function GetTotalPrice() {
     const total = CartController.getTotalPrice(cart)
@@ -45,18 +52,16 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    liff.ready
-      .then(() => {
-        alert(liff.getAccessToken())
-        // setLineAccToken(liff.getAccessToken())
-        createOrder(cart, currentRestaurant, liff.getAccessToken(), bypass).then(order => {
-          console.log(order)
-          createTransaction(order, liff.getAccessToken(), bypass).then(deepLink => {
-            console.log(deepLink)
-            window.open(deepLink, '_blank')
-            CartController.clear()
-            setIsLoading(false)
-          })
+    alert("Checking out line acc token is: " + lineAccToken)
+    // setLineAccToken(lineAccToken)
+    createOrder(cart, currentRestaurant, lineAccToken, bypass)
+      .then(order => {
+        console.log(order)
+        createTransaction(order, lineAccToken, bypass).then(deepLink => {
+          console.log(deepLink)
+          window.open(deepLink, '_blank')
+          CartController.clear()
+          setIsLoading(false)
         })
       })
       .catch(e => {
