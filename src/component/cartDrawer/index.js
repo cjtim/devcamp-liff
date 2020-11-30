@@ -39,54 +39,19 @@ export default function CartDrawer() {
     return <>{total}</>
   }
 
-  async function checkout(bypass = false) {
-    try {
-      setIsLoading(true)
-      await liff.ready
-      // backendInstance.defaults.options.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-      let deepLink
-
-      const order = await getJSON(
-        '/order/create',
-        {
-          selectedMenu: cart.map(object => ({ ...object })),
-          restaurantId: currentRestaurant
-        },
-        {
-          authorization: `Bearer ${liff.getAccessToken()}`
-        }
-      )
-      console.log(order)
-      const transaction = await getJSON(
-        '/transaction/create',
-        {
-          payAmount: order.totalAmount,
-          orderId: order.id,
-          bypass: bypass
-        },
-        {
-          authorization: `Bearer ${liff.getAccessToken()}`
-        }
-      )
-      console.log(transaction)
-      deepLink = transaction.deeplinkUrl
-      if (bypass) {
-        getString('/scb/webhook', {
-          transactionId: transaction.transactionId,
-          bypass: bypass
+  function checkout(bypass = false) {
+    setIsLoading(true)
+    liff.ready
+      .then(() => {
+        createOrder(cart, currentRestaurant,liff.getAccessToken(), bypass).then(order => {
+          console.log(order)
+          createTransaction(order, liff.getAccessToken(), bypass).then(deepLink => {
+            setIsLoading(false)
+            window.open(deepLink)
+          })
         })
-        const index = deepLink.indexOf('?callback_url=') + 14
-        window.open(deepLink.substring(index))
-        setIsLoading(false)
-      } else {
-        window.open(deepLink)
-        setIsLoading(false)
-      }
-      CartController.clear()
-    } catch (e) {
-      alert(e)
-      console.log(e)
-    }
+      })
+      .finally(() => CartController.clear())
   }
 
   if (cart.length > 0)
@@ -166,4 +131,40 @@ export default function CartDrawer() {
       </>
     )
   return ''
+}
+
+async function createOrder(cart, currentRestaurant, accToken, bypass = false) {
+  return await getJSON(
+    '/order/create',
+    {
+      selectedMenu: cart.map(object => ({ ...object })),
+      restaurantId: currentRestaurant
+    },
+    {
+      authorization: `Bearer ${accToken}`
+    }
+  )
+}
+async function createTransaction(order, accToken, bypass = false) {
+  const transaction = await getJSON(
+    '/transaction/create',
+    {
+      payAmount: order.totalAmount,
+      orderId: order.id,
+      bypass: bypass
+    },
+    {
+      authorization: `Bearer ${accToken}`
+    }
+  )
+  let deepLink = transaction.deeplinkUrl
+  if (bypass) {
+    getString('/scb/webhook', {
+      transactionId: transaction.transactionId,
+      bypass: bypass
+    })
+    const index = deepLink.indexOf('?callback_url=') + 14
+    deepLink = deepLink.substring(index)
+  }
+  return deepLink
 }
