@@ -9,6 +9,7 @@ import { RestaurantRoute } from './page/restaurant'
 import { OrderRoute } from './page/order'
 import { CartController } from './function/cart.controller'
 import { DashBoardRoute } from './page/dashboard'
+import { RegisterRoute } from './page/register'
 
 export default function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function App() {
       <Route path="/restaurant" component={() => <RestaurantRoute />} />
       <Route path="/payment" component={() => <PaymentRoute />} />
       <Route path="/order" component={() => <OrderRoute />} />
+      <Route path="/register" component={() => <RegisterRoute />} />
       <Route component={() => <h1>Not found</h1>} />
     </Switch>
   )

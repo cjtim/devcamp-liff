@@ -15,6 +15,18 @@ export function Home() {
           Order Food
         </Button>
       </Flex>
+      <br>
+      </br>
+      <Flex justify="center" py={4}>
+        <Button
+          as="a"
+          href="/register"
+          colorScheme="green"
+          color="white"
+        >
+          Register
+        </Button>
+      </Flex>
     </PageLayout>
   )
 }
