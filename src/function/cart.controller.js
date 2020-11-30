@@ -1,9 +1,6 @@
-import {
-  cart as atomCart,
-  currentRestaurant as atomCurrentRestaurant,
-  currentRestaurant
-} from '../recoil'
+import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../recoil'
 import { promiseSetRecoil, promiseGetRecoil } from 'recoil-outside'
+import { useRecoilValue } from 'recoil'
 
 export class CartController {
   static clear() {
@@ -29,8 +26,13 @@ export class CartController {
     )
   }
   static async addMenu(menuObj, unit, note, restaurantId) {
+    const oldRestaurant = await promiseGetRecoil(atomCurrentRestaurant)
+    if (restaurantId !== oldRestaurant && oldRestaurant !== '') {
+      alert('คุณได้เปลี่ยนร้านอาหาร ตระกร้าของคุณจะถูกล้าง')
+      this.clear()
+    }
     const id = Math.floor(Math.random() * 10 ** 16)
-    await promiseSetRecoil(currentRestaurant, restaurantId)
+    await promiseSetRecoil(atomCurrentRestaurant, restaurantId)
     const cart = await promiseGetRecoil(atomCart)
     await promiseSetRecoil(atomCart, [
       ...cart,
