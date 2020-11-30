@@ -19,7 +19,7 @@ import { useRecoilValue } from 'recoil'
 import {
   cart as atomCart,
   currentRestaurant as atomCurrentRestaurant,
-  lineAcctoken
+  lineAcctoken as atomLineAccToken
 } from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
@@ -30,7 +30,7 @@ const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
-  const lineAccToken1 = useRecoilValue(lineAcctoken)
+  const lineAccToken = useRecoilValue(atomLineAccToken)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
@@ -44,10 +44,10 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    createOrder(cart, currentRestaurant, lineAccToken1, bypass)
+    createOrder(cart, currentRestaurant, lineAccToken, bypass)
       .then(order => {
         console.log(order)
-        createTransaction(order, lineAccToken1, bypass).then(deepLink => {
+        createTransaction(order, lineAccToken, bypass).then(deepLink => {
           console.log(deepLink)
           window.open(deepLink, '_blank')
           CartController.clear()
