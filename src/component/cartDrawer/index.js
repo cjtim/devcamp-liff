@@ -19,18 +19,19 @@ import { useRecoilValue } from 'recoil'
 import {
   cart as atomCart,
   currentRestaurant as atomCurrentRestaurant,
-  lineAcctoken as atomLineAccToken
+  // lineAcctoken as atomLineAccToken
 } from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
 import bent from 'bent'
+import liff from '@line/liff/dist/lib'
 const getJSON = bent(process.env.REACT_APP_BACKEND_URL, 'json', 'POST')
 const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
-  const lineAccToken = useRecoilValue(atomLineAccToken)
+  // const [lineAccToken, setLineAccToken] = useRecoilState(atomLineAccToken)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
@@ -44,14 +45,18 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    createOrder(cart, currentRestaurant, lineAccToken, bypass)
-      .then(order => {
-        console.log(order)
-        createTransaction(order, lineAccToken, bypass).then(deepLink => {
-          console.log(deepLink)
-          window.open(deepLink, '_blank')
-          CartController.clear()
-          setIsLoading(false)
+    liff.ready
+      .then(() => {
+        alert(liff.getAccessToken())
+        // setLineAccToken(liff.getAccessToken())
+        createOrder(cart, currentRestaurant, liff.getAccessToken(), bypass).then(order => {
+          console.log(order)
+          createTransaction(order, liff.getAccessToken(), bypass).then(deepLink => {
+            console.log(deepLink)
+            window.open(deepLink, '_blank')
+            CartController.clear()
+            setIsLoading(false)
+          })
         })
       })
       .catch(e => {
