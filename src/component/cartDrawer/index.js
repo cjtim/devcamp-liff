@@ -41,13 +41,14 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    liff.ready
+    liff
+      .ready()
       .then(() => {
-        createOrder(cart, currentRestaurant,liff.getAccessToken(), bypass).then(order => {
+        createOrder(cart, currentRestaurant, liff.getAccessToken(), bypass).then(order => {
           console.log(order)
           createTransaction(order, liff.getAccessToken(), bypass).then(deepLink => {
             setIsLoading(false)
-            window.open(deepLink)
+            window.open(deepLink, '_blank')
           })
         })
       })
