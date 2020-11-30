@@ -16,17 +16,21 @@ import {
 } from '@chakra-ui/react'
 import { CartController } from '../../function/cart.controller'
 import { useRecoilValue } from 'recoil'
-import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
+import {
+  cart as atomCart,
+  currentRestaurant as atomCurrentRestaurant,
+  lineAcctoken
+} from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
-import liff from '@line/liff/dist/lib'
 import bent from 'bent'
 const getJSON = bent(process.env.REACT_APP_BACKEND_URL, 'json', 'POST')
 const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
+  const lineAccToken = useRecoilValue(lineAcctoken)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
@@ -41,18 +45,22 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    liff
-      .ready()
-      .then(() => {
-        createOrder(cart, currentRestaurant, liff.getAccessToken(), bypass).then(order => {
-          console.log(order)
-          createTransaction(order, liff.getAccessToken(), bypass).then(deepLink => {
-            setIsLoading(false)
-            window.open(deepLink, '_blank')
-          })
+    createOrder(cart, currentRestaurant, lineAccToken, bypass)
+      .then(order => {
+        console.log(order)
+        createTransaction(order, lineAccToken, bypass).then(deepLink => {
+          console.log(deepLink)
+          window.open(deepLink, '_blank')
+          CartController.clear()
         })
       })
-      .finally(() => CartController.clear())
+      .catch(e => {
+        alert(e.message)
+        console.log(e)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   if (cart.length > 0)
