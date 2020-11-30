@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { LoadingAnimation } from '../../component/loadingAnimation'
 import { useParams } from 'react-router-dom'
 import { PageLayout } from '../../component/pageLayout'
 import { MenuCard } from '../../component/menuCard'
-import { ApiController } from '../../function/api.controller'
+import { useAPI } from '../../function/api'
+
 
 export function RestaurantMenu() {
   let { restaurantId } = useParams()
-  const [isLoading, setIsLoading] = useState(true)
-  const [menuPayload, setMenuPayload] = useState([])
-  useEffect(() => {
-    ApiController.menuList(restaurantId).then(data => {
-      setMenuPayload(data)
-      setIsLoading(false)
-    })
-  }, [])
+  const { data, isLoading } = useAPI('/menu/list', {
+    restaurantId: restaurantId
+  })
+
   if (isLoading) return <LoadingAnimation />
   return (
     <PageLayout>
-      {menuPayload &&
-        menuPayload.map((menu, index) => {
+      {data &&
+        data.map((menu, index) => {
           return <MenuCard key={index} menu={menu} />
         })}
     </PageLayout>

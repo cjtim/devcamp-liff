@@ -20,7 +20,13 @@ import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '..
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
-import { ApiController } from '../../function/api.controller'
+
+import axios from 'axios'
+import liff from '@line/liff/dist/lib'
+
+const backendInstance = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_URL
+})
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
@@ -36,13 +42,51 @@ export default function CartDrawer() {
     return <>{total}</>
   }
 
-  async function checkout(bypass = false) {
+  function checkout(bypass = false) {
     setIsLoading(true)
-    ApiController.checkout(cart, currentRestaurant, bypass).then(deepLink => {
-      window.open(deepLink)
-      setIsLoading(false)
-      CartController.clear()
-    })
+    liff.ready
+      .then(() => {
+        backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+        let deepLink
+        backendInstance
+          .post('/order/create', {
+            selectedMenu: cart.map(object => ({ ...object })),
+            restaurantId: currentRestaurant
+          })
+          .then(res => {
+            console.log(res.data)
+            backendInstance
+              .post('/transaction/create', {
+                payAmount: res.data.totalAmount,
+                orderId: res.data.id,
+                bypass: bypass
+              })
+              .then(res => {
+                console.log(res.data)
+                deepLink = res.data.deeplinkUrl
+                if (bypass) {
+                  backendInstance
+                    .post('/scb/webhook', {
+                      transactionId: res.data.transactionId,
+                      bypass: bypass
+                    })
+                    .then(res => {
+                      const index = deepLink.indexOf('?callback_url=') + 14
+                      window.open(deepLink.substring(index))
+                      setIsLoading(false)
+                    })
+                } else {
+                  window.open(deepLink)
+                  setIsLoading(false)
+                }
+                CartController.clear()
+              })
+          })
+      })
+      .catch(e => {
+        alert(e.message)
+        console.log(e)
+      })
   }
 
   if (cart.length > 0)

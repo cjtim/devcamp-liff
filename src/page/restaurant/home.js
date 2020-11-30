@@ -1,18 +1,12 @@
 import { Box } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { RestaurantCard } from '../../component/restaurantCard'
 import { LoadingAnimation } from '../../component/loadingAnimation'
-import { ApiController } from '../../function/api.controller'
+import { useAPI } from '../../function/api'
 
 export function RestaurantHome() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [restaurantPayload, setrestaurantPayload] = useState(undefined)
-  useEffect(() => {
-    ApiController.restaurantList().then(data => {
-      setrestaurantPayload(data)
-      setIsLoading(false)
-    })
-  }, [])
+  const { data: restaurantPayload, isLoading } = useAPI('/restaurant/list')
+
   if (isLoading) return <LoadingAnimation />
   return (
     <Box bg="#D7DBDD" height={window.innerHeight}>
