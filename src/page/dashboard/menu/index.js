@@ -51,6 +51,12 @@ function MenuHome() {
             </>
           )
         })}
+
+      <br></br>
+      <br></br>
+      <Button as="a" href="/dashboard/summary" colorScheme="orange" color="white">
+        Summary
+      </Button>
     </>
   )
 }
