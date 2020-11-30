@@ -30,11 +30,10 @@ const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
-  const lineAccToken = useRecoilValue(lineAcctoken)
+  const lineAccToken1 = useRecoilValue(lineAcctoken)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
-
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
 
@@ -45,10 +44,10 @@ export default function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    createOrder(cart, currentRestaurant, lineAccToken, bypass)
+    createOrder(cart, currentRestaurant, lineAccToken1, bypass)
       .then(order => {
         console.log(order)
-        createTransaction(order, lineAccToken, bypass).then(deepLink => {
+        createTransaction(order, lineAccToken1, bypass).then(deepLink => {
           console.log(deepLink)
           window.open(deepLink, '_blank')
           CartController.clear()
