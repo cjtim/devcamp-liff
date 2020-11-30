@@ -14,6 +14,14 @@ export function Home() {
         >
           Order Food
         </Button>
+
+        <Button
+          as = "a"
+          href="/order"
+          colorScheme="teal"
+          color="white">
+            View Order
+        </Button>
       </Flex>
     </PageLayout>
   )

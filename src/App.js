@@ -29,6 +29,7 @@ export default function App() {
       <Route path="/restaurant" component={() => <RestaurantRoute />} />
       <Route path="/payment" component={() => <PaymentRoute />} />
       <Route path="/order" component={() => <OrderRoute />} />
+
       <Route component={() => <h1>Not found</h1>} />
     </Switch>
   )
