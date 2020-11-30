@@ -7,8 +7,12 @@
     "@chakra-ui/react": "^1.0.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
+    "@google-cloud/storage": "^5.5.0",
     "@line/liff": "^2.4.1",
+    "bent": "^7.3.12",
     "cross-env": "^7.0.2",
+    "firebase": "^8.1.1",
+    "firebase-admin": "^9.4.1",
     "framer-motion": "^2.9.4",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
@@ -16,7 +20,8 @@
     "react-scripts": "2.1.1",
     "recoil": "^0.0.13",
     "recoil-outside": "^0.1.0",
-    "swr": "^0.3.8-beta.2"
+    "swr": "^0.3.8-beta.2",
+    "uuid": "^8.3.1"
   },
   "scripts": {
     "dev": "cross-env BROWSER=none HTTPS=true react-scripts start",
