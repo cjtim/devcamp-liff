@@ -23,7 +23,7 @@ export default function App() {
   const setCurrentRestaurant = useSetRecoilState(atomCurrentRestaurant)
   useEffect(() => {
     liffLogin().then(() => {
-      alert("app.js lineAccToken " + liff.getAccessToken())
+      localStorage.setItem('lineToken', liff.getAccessToken())
       setLineAccToken(liff.getAccessToken())
     })
     const localCart = localStorage.getItem('cart')

@@ -15,23 +15,21 @@ import {
   Stack
 } from '@chakra-ui/react'
 import { CartController } from '../../function/cart.controller'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import {
   cart as atomCart,
-  currentRestaurant as atomCurrentRestaurant,
-  lineAcctoken as atomLineAccToken
+  currentRestaurant as atomCurrentRestaurant
+  // lineAcctoken as atomLineAccToken
 } from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
 import bent from 'bent'
-// import liff from '@line/liff'
 const getJSON = bent(process.env.REACT_APP_BACKEND_URL, 'json', 'POST')
 const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
 
 export function CartDrawer() {
   const cart = useRecoilValue(atomCart)
-  const lineAccToken = useRecoilValue(atomLineAccToken)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
@@ -45,11 +43,12 @@ export function CartDrawer() {
 
   function checkout(bypass = false) {
     setIsLoading(true)
-    alert('Checking out line acc token is: ' + lineAccToken)
-    createOrder(cart, currentRestaurant, lineAccToken, bypass)
+    const accToken = localStorage.getItem('lineToken')
+    alert('Checking out line acc token is: ' + accToken)
+    createOrder(cart, currentRestaurant, accToken, bypass)
       .then(order => {
         console.log(order)
-        createTransaction(order, lineAccToken, bypass).then(deepLink => {
+        createTransaction(order, accToken, bypass).then(deepLink => {
           console.log(deepLink)
           window.open(deepLink, '_blank')
           CartController.clear()
