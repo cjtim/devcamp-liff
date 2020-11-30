@@ -16,12 +16,11 @@ import {
 } from '@chakra-ui/react'
 import { CartController } from '../../function/cart.controller'
 import { useRecoilValue } from 'recoil'
-import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../../recoil'
+import { cart as atomCart, currentRestaurant as atomCurrentRestaurant, lineAcctoken } from '../../recoil'
 import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
 
-import liff from '@line/liff'
 import axios from 'axios'
 
 const backendInstance = axios.create({
@@ -31,6 +30,7 @@ const backendInstance = axios.create({
 export default function CartDrawer() {
   const cart = useRecoilValue(atomCart)
   const currentRestaurant = useRecoilValue(atomCurrentRestaurant)
+  const lineAccToken = useRecoilValue(lineAcctoken)
   const [isCheckout, setIsCheckout] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
 
@@ -44,32 +44,45 @@ export default function CartDrawer() {
 
   async function checkout(bypass = false) {
     setIsLoading(true)
-    await liff.ready
-    backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+    backendInstance.defaults.headers['authorization'] = `Bearer ${lineAccToken}`
     let deepLink
-    const order = await backendInstance.post('/order/create', {
-      selectedMenu: cart.map(object => ({ ...object })),
-      restaurantId: currentRestaurant
-    })
-    console.log(order.data)
-    const transaction = await backendInstance.post('/transaction/create', {
-      payAmount: order.data.totalAmount,
-      orderId: order.data.id,
-      bypass: bypass
-    })
-    console.log(transaction.data)
-    deepLink = transaction.data.deeplinkUrl
-    if (bypass) {
-      backendInstance.post('/scb/webhook', {
-        transactionId: transaction.data.transactionId,
-        bypass: bypass
+    backendInstance
+      .post('/order/create', {
+        selectedMenu: cart.map(object => ({ ...object })),
+        restaurantId: currentRestaurant
       })
-      const index = deepLink.indexOf('?callback_url=') + 14
-      deepLink = deepLink.substring(index)
-    }
-    window.open(deepLink)
-    setIsLoading(false)
-    CartController.clear()
+      .then(res => {
+        console.log(res.data)
+        backendInstance
+          .post('/transaction/create', {
+            payAmount: res.data.totalAmount,
+            orderId: res.data.id,
+            bypass: bypass
+          })
+          .then(res => {
+            console.log(res.data)
+            deepLink = res.data.deeplinkUrl
+            if (bypass) {
+              backendInstance
+                .post('/scb/webhook', {
+                  transactionId: res.data.transactionId,
+                  bypass: bypass
+                })
+                .then(res => {
+                  const index = deepLink.indexOf('?callback_url=') + 14
+                  window.open(deepLink.substring(index))
+                  setIsLoading(false)
+                })
+            } else {
+              window.open(deepLink)
+              setIsLoading(false)
+            }
+            CartController.clear()
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      })
   }
 
   if (cart.length > 0)
