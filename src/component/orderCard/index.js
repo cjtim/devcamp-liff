@@ -20,7 +20,7 @@ export function OrderCard({ order }) {
                 divider={<StackDivider borderColor="green" />}>
 
                   <Box w="100% " bg="white" marginTop="10px">
-                      <Text>Restaurant Name</Text>
+                    <Text>{order.Restaurant.name}</Text>
                   </Box>
 
                   <Box h="50px" bg="white">

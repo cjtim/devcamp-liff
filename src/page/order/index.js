@@ -20,7 +20,7 @@ export function OrderRoute() {
 function OrderHome() {
   const { data: orderPayload, isLoading } = useAPI('/order/list')
 
-  if (!isLoading)
+  if (orderPayload)
     return (
       <>
         <Container py={2}>

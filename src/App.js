@@ -17,6 +17,9 @@ export default function App() {
   const setLineAccToken = useSetRecoilState(lineAcctoken)
   useEffect(() => {
     liffLogin().then(() => {
+      liff.getProfile().then((profile) => {
+        localStorage.setItem('lineUid', profile.userId)
+      })
       localStorage.setItem('lineToken', liff.getAccessToken())
       setLineAccToken(liff.getAccessToken())
     })

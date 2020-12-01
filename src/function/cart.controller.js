@@ -1,6 +1,5 @@
 import { cart as atomCart, currentRestaurant as atomCurrentRestaurant } from '../recoil'
 import { promiseSetRecoil, promiseGetRecoil } from 'recoil-outside'
-import { useRecoilValue } from 'recoil'
 
 export class CartController {
   static clear() {

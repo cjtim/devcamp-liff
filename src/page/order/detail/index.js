@@ -16,7 +16,6 @@ export function DetailHome() {
 function OrderDetail() {
   let { orderId } = useParams()
   const { data: orderReceipt } = useAPI('/order/get', { orderId: orderId })
-
   if (orderReceipt) {
     return (
       <Container maxW="md" paddingLeft="0px" paddingRight="0px">
@@ -27,7 +26,7 @@ function OrderDetail() {
           <Box p={5} borderWidth="1px">
             <HStack spacing="24px">
               <Text fontSize="lg" fontWeight="bold">
-                Restaurant Name
+                {orderReceipt.Restaurant.name}
               </Text>
             </HStack>
           </Box>
@@ -58,7 +57,7 @@ function OrderDetail() {
             <Flex>
               <Box>Total:</Box>
               <Spacer />
-              {/* <Box>฿{orderReceipt.Transactions[0].amount}</Box> */}
+              <Box>฿{orderReceipt.Transactions[0] ?  orderReceipt.Transactions[0].amount : "DB PAY BYPASS" }</Box>
             </Flex>
           </Box>
         </Stack>
