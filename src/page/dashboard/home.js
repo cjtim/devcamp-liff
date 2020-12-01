@@ -17,7 +17,7 @@ export function DashBoardHome() {
   }
   if (isLoading) return <LoadingAnimation />
   // if (data && data.length === 0) return "no new order"
-
+  console.log(data)
   return (
     <>
       <Button

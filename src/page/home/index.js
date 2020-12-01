@@ -12,6 +12,14 @@ export function Home() {
         <Button as="a" href="/order" colorScheme="teal" color="white">
           View Order
         </Button>
+
+        <Button
+          as="a"
+          href="/dashboard"
+          colorScheme="red"
+          color="white">
+            Dashboard
+          </Button>
       </Flex>
       <br></br>
       <Flex justify="center" py={4}>
