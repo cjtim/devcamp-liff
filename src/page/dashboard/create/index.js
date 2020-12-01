@@ -41,9 +41,9 @@ function CreateMenuHome() {
   const [url, setUrl] = useState('')
 
   useEffect(() => {
-    liff.ready.then(() => {
-      backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
-    })
+    backendInstance.defaults.headers['authorization'] = `Bearer ${localStorage.getItem(
+      'lineToken'
+    )}`
   }, [])
 
   async function addMenu() {
