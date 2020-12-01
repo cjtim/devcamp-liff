@@ -6,8 +6,8 @@ const backendInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL
 })
 async function setHeaders() {
-  await liff.ready
-  backendInstance.defaults.headers['authorization'] = `Bearer ${liff.getAccessToken()}`
+  // await liff.ready
+  backendInstance.defaults.headers['authorization'] = `Bearer ${localStorage.getItem('lineToken')}`
 }
 
 export class ConsoleApiController {
