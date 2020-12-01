@@ -12,6 +12,7 @@ import { DashBoardRoute } from './page/dashboard'
 import { RegisterRoute } from './page/register'
 import { useSetRecoilState } from 'recoil'
 import { lineAcctoken } from './recoil'
+import { ProfileRoute } from './page/profile'
 
 export default function App() {
   const setLineAccToken = useSetRecoilState(lineAcctoken)
@@ -32,6 +33,7 @@ export default function App() {
       <Route path="/payment" component={() => <PaymentRoute />} />
       <Route path="/order" component={() => <OrderRoute />} />
       <Route path="/register" component={() => <RegisterRoute />} />
+      <Route path="/profile" component={() => <ProfileRoute />} />
       <Route component={() => <h1>Not found</h1>} />
     </Switch>
   )
