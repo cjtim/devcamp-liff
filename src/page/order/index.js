@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import { LoadingAnimation } from '../../component/loadingAnimation'
 import { OrderCard } from '../../component/orderCard'
-import { Container, Text, Tabs, Tab, TabList, TabPanels, TabPanel } from '@chakra-ui/react'
+import { Container, Text, Tabs, Tab, TabList, TabPanels, TabPanel, Center } from '@chakra-ui/react'
 import { DetailHome } from './detail'
 import { useAPI } from '../../function/api'
 
@@ -23,12 +23,14 @@ function OrderHome() {
   if (orderPayload)
     return (
       <>
-        <Container py={2}>
-          <Text fontSize="3xl" marginTop="10px">
-            Order Detail
-          </Text>
+        <Container p={0} h={window.innerHeight}>
+          <Center>
+            <Text fontSize="3xl" fontWeight="bold" marginTop="10px">
+              Order Detail
+            </Text>
+          </Center>
           <Tabs variant="unsytle" marginTop="20px" marginBottom="20px">
-            <TabList>
+            <TabList pb={4} marginLeft="20px">
               <Tab _selected={{ color: 'white', bg: 'red.300' }} borderRadius="20px">
                 COOKING
               </Tab>
@@ -36,7 +38,7 @@ function OrderHome() {
                 COMPLETE
               </Tab>
             </TabList>
-            <TabPanels>
+            <TabPanels bg="#EDF2F7" shadow="inner">
               <TabPanel>
                 {orderPayload &&
                   orderPayload

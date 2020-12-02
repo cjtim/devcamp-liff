@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams, useRouteMatch, Switch, Route } from 'react-router-dom'
 import { LoadingAnimation } from '../../../component/loadingAnimation'
-import { Container, HStack, Stack, Text, Box, Flex, Spacer, Divider } from '@chakra-ui/react'
+import { Container, HStack, Stack, Text, Box, Flex, Spacer, Divider, Center, VStack } from '@chakra-ui/react'
 import { useAPI } from '../../../function/api'
 
 export function DetailHome() {
@@ -18,20 +18,22 @@ function OrderDetail() {
   const { data: orderReceipt } = useAPI('/order/get', { orderId: orderId })
   if (orderReceipt) {
     return (
-      <Container maxW="md" paddingLeft="0px" paddingRight="0px">
-        <Text fontWeight="bold" fontSize="3xl" marginLeft="10px">
-          Order Receipt
-        </Text>
-        <Stack>
-          <Box p={5} borderWidth="1px">
-            <HStack spacing="24px">
+      <Container bg="#EDF2F7" p={0} paddingBottom="30px" paddingTop="10px" h={window.innerHeight}>
+        <Center marginBottom="10px">
+          <Text fontWeight="bold" fontSize="3xl">
+            Order Receipt
+          </Text>
+        </Center>
+        <VStack align="stretch" >
+          <Box p={5} borderWidth="1px" bg="white" boxShadow="md">
+            <HStack spacing="24px" >
               <Text fontSize="lg" fontWeight="bold">
                 {orderReceipt.Restaurant.name}
               </Text>
             </HStack>
           </Box>
 
-          <Box p={5}>
+          <Box p={5} bg="white" boxShadow="md">
             <Box marginBottom="10px" fontWeight="bold">
               Order Summary
             </Box>
@@ -48,7 +50,7 @@ function OrderDetail() {
             })}
             <Divider marginTop="20px" />
           </Box>
-          <Box p={5}>
+          <Box p={5} bg="white" boxShadow="md">
             <Flex>
               <Box>Unit:</Box>
               <Spacer />
@@ -60,7 +62,7 @@ function OrderDetail() {
               <Box>฿{orderReceipt.Transactions[0] ?  orderReceipt.Transactions[0].amount : "DB PAY BYPASS" }</Box>
             </Flex>
           </Box>
-        </Stack>
+        </VStack>
       </Container>
     )
   }

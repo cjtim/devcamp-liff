@@ -5,7 +5,7 @@ export function OrderCard({ order }) {
     <>
       <Link href={"/order/" + order.id} style={{ textDecoration: 'none' }}>
         <Flex justify="center">
-          <Box w="md" borderWidth="1px" rounded="lg" overflow="hidden" marginBottom="5px">
+          <Box w="md" bg="white" borderWidth="3px" boxShadow="base" rounded="lg" overflow="hidden" marginBottom="10px">
             <HStack spacing="24px">
 
               <Circle size="60px" bg="white" marginLeft="15px">
@@ -28,7 +28,7 @@ export function OrderCard({ order }) {
                   </Box>
 
                   <Box align="right" bg="white">
-                    <Text>Total: {order.Transactions[0].amount}</Text>
+                    <Text>Total: {order.Transactions[0] ? order.Transactions[0]['amount'] : "Error"}</Text>
                   </Box>
 
               </VStack>
