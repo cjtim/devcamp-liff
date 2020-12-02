@@ -10,7 +10,9 @@ import {
   NumberInputField,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  NumberInputStepper
+  NumberInputStepper,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
 import { Route, Switch, useRouteMatch, useHistory } from 'react-router-dom'
@@ -71,16 +73,24 @@ function CreateMenuHome() {
     <>
       <Stack spacing={5}>
         <br></br>
-        <Heading as="h1">เพิ่มเมนูอาหาร</Heading>
+        <Heading as="h1"  textAlign={['left', 'center']}>เพิ่มเมนูอาหาร</Heading>
 
         <br></br>
 
+        <FormControl isRequired> 
+                    <FormLabel>ชื่อเมนู</FormLabel>
+                </FormControl>
+
         <Input
-          placeholder="ชื่อเมนู"
+          placeholder="ใส่ชื่อเมนู"
           size="md"
           value={name}
           onChange={e => setName(e.target.value)}
         />
+
+        <FormControl isRequired> 
+                    <FormLabel>ราคา</FormLabel>
+        </FormControl>
 
         <NumberInput onChange={valueString => setValue(parse(valueString))} value={format(value)}>
           <NumberInputField />
@@ -90,11 +100,15 @@ function CreateMenuHome() {
           </NumberInputStepper>
         </NumberInput>
 
+
+        <FormControl isRequired> 
+                    <FormLabel>รูปอาหาร</FormLabel>
+        </FormControl>
         <InputGroup size="sm">
           <InputLeftAddon children="URL" />
           <Input
             borderRadius="0"
-            placeholder="รูปอาหาร"
+            placeholder="ใส่รูปอาหาร"
             value={url}
             onChange={e => setUrl(e.target.value)}
           />

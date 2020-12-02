@@ -11,6 +11,7 @@ export function DashBoardMenuRoute() {
     <Switch>
       <Route exact path={match.path} component={() => <MenuHome />} />
       <Route path={match.path + '/createMenu'} component={() => <DashBoardCreateMenuRoute />} />
+      {/* <Route path={match.path + '/searchMenu'} component={() => <DashBoardSearchMenuRoute />} /> */}
       <Route component={() => 'ไม่พบร้านอาหาร'} />
     </Switch>
   )
@@ -56,6 +57,11 @@ function MenuHome() {
       <br></br>
       <Button as="a" href="/dashboard/summary" colorScheme="orange" color="white">
         Summary
+      </Button>
+      <br></br>
+      <br></br>
+      <Button as="a" href="/dashboard/search" colorScheme="yellow" color="white">
+        Search
       </Button>
     </>
   )
