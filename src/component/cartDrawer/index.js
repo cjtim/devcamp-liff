@@ -47,7 +47,7 @@ export function CartDrawer() {
   function checkout(bypass = false) {
     setIsLoading(true)
     const accToken = localStorage.getItem('lineToken')
-    alert('Checking out line acc token is: ' + accToken)
+    // alert('Checking out line acc token is: ' + accToken)
     createOrder(cart, currentRestaurant, accToken, bypass)
       .then(order => {
         console.log(order)
