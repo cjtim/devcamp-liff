@@ -34,6 +34,11 @@ function OrderHome() {
               <Tab _selected={{ color: 'white', bg: 'red.300' }} borderRadius="20px">
                 COOKING
               </Tab>
+
+              <Tab _selected={{ color: 'white', bg: 'yellow.300' }} borderRadius="20px">
+                WAITING
+              </Tab>
+
               <Tab _selected={{ color: 'white', bg: 'green.300' }} borderRadius="20px">
                 COMPLETE
               </Tab>
@@ -50,6 +55,19 @@ function OrderHome() {
                       return ''
                     })}
               </TabPanel>
+
+              <TabPanel>
+                {orderPayload &&
+                  orderPayload
+                    .filter(i => i.status === 'WAIT_FOR_PICKUP')
+                    .map((i, index) => {
+                      if (index < 10) {
+                        return <OrderCard key={index} order={i} statusColor="#ECC94B" />
+                      }
+                      return ''
+                    })}
+              </TabPanel>
+
               <TabPanel>
                 {orderPayload &&
                   orderPayload

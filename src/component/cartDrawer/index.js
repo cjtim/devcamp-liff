@@ -87,7 +87,7 @@ export function CartDrawer() {
           <DrawerOverlay>
             <DrawerContent>
               <DrawerCloseButton />
-              <DrawerHeader>ตะกร้าของ {displayName}</DrawerHeader>
+              <DrawerHeader>รายการอาหารของ {displayName}</DrawerHeader>
 
               <DrawerBody>
                 {isLoading && <LoadingAnimation height="50%" />}
