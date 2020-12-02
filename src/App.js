@@ -10,6 +10,7 @@ import { OrderRoute } from './page/order'
 import { CartController } from './function/cart.controller'
 import { DashBoardRoute } from './page/dashboard'
 import { RegisterRoute } from './page/register'
+import { ShuffleRoute } from './page/shuffle'
 import { useSetRecoilState } from 'recoil'
 import { lineAcctoken } from './recoil'
 import { ProfileRoute } from './page/profile'
@@ -38,6 +39,7 @@ export default function App() {
       <Route path="/order" component={() => <OrderRoute />} />
       <Route path="/register" component={() => <RegisterRoute />} />
       <Route path="/profile" component={() => <ProfileRoute />} />
+      <Route path="/shuffle" component={() => <ShuffleRoute />} />
       <Route component={() => <h1>Not found</h1>} />
     </Switch>
   )
