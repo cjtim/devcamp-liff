@@ -17,7 +17,7 @@ export function DashBoardOrderCard({
       <Flex mt={4} borderWidth="4px" alignItems="center" marginBottom="30px">
         <Flex alignItems="center">
           <Box ml={5} mr={5}>
-            {index}
+            {id}
           </Box>
           <Spacer />
           <Box>
