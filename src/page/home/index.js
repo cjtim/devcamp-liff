@@ -15,20 +15,23 @@ export function Home() {
             View Order
           </Button>
 
-          <Button
+          {/* <Button
             as="a"
             href="/dashboard"
             colorScheme="red"
             color="white">
               Dashboard
-            </Button>
+            </Button> */}
 
-            <Button as="a" href="/register" colorScheme="green" color="white">
+            {/* <Button as="a" href="/register" colorScheme="green" color="white">
               Register
-            </Button>
+            </Button> */}
 
             <Button as="a" href="/shuffle" colorScheme="green" color="white">
               Random
+            </Button>
+            <Button as="a" href="/profile" colorScheme="green" color="white">
+              Profile
             </Button>
         </VStack>
 
