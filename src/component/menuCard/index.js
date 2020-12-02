@@ -38,7 +38,7 @@ export function MenuCard({ menu }) {
     <>
       <Link onClick={onOpen} style={{ textDecoration: 'none' }}>
         <Flex justify="center">
-          <Box w="md" borderWidth="1px" rounded="lg" overflow="hidden" bg="white">
+          <Box w="sm" borderWidth="1px" rounded="lg" overflow="hidden" bg="white">
             <Flex alignContent="center" alignItems="center">
               <Box width="120px" height="100px">
                 <Image

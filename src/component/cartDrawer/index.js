@@ -25,8 +25,10 @@ import { OrderCard } from './orderCard'
 import { AskPaymentMethod } from './askPaymentMethod'
 import { LoadingAnimation } from '../loadingAnimation'
 import bent from 'bent'
+
 const getJSON = bent(process.env.REACT_APP_BACKEND_URL, 'json', 'POST')
 const getString = bent(process.env.REACT_APP_BACKEND_URL, 'string', 'POST')
+const displayName = localStorage.getItem('displayName')
 
 export function CartDrawer() {
   const cart = useRecoilValue(atomCart)
@@ -35,6 +37,7 @@ export function CartDrawer() {
   const [isLoading, setIsLoading] = React.useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
+
 
   function GetTotalPrice() {
     const total = CartController.getTotalPrice(cart)
@@ -84,7 +87,7 @@ export function CartDrawer() {
           <DrawerOverlay>
             <DrawerContent>
               <DrawerCloseButton />
-              <DrawerHeader>My Basket{' ชื่อร้านอาหาร'}</DrawerHeader>
+              <DrawerHeader>ตะกร้าของ {displayName}</DrawerHeader>
 
               <DrawerBody>
                 {isLoading && <LoadingAnimation height="50%" />}

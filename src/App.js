@@ -20,6 +20,7 @@ export default function App() {
     liffLogin().then(() => {
       liff.getProfile().then((profile) => {
         localStorage.setItem('lineUid', profile.userId)
+        localStorage.setItem('displayName', profile.displayName)
       })
       localStorage.setItem('lineToken', liff.getAccessToken())
       setLineAccToken(liff.getAccessToken())
