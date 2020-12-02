@@ -28,8 +28,7 @@ function OrderDetail() {
   let { orderId } = useParams()
   const { data: orderReceipt } = useAPI('/order/get', { orderId: orderId })
   const { data: queue } = useAPI('/order/queue', { orderId: orderId })
-  console.log(queue)
-  if (orderReceipt) {
+  if (orderReceipt && queue) {
     return (
       <Container bg="#EDF2F7" p={0} paddingBottom="30px" paddingTop="10px" h={window.innerHeight}>
         <Center marginBottom="10px">
