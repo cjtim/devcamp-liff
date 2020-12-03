@@ -60,9 +60,9 @@ function MenuHome() {
       </Button>
       <br></br>
       <br></br>
-      <Button as="a" href="/dashboard/search" colorScheme="yellow" color="white">
+      {/* <Button as="a" href="/dashboard/search" colorScheme="yellow" color="white">
         Search
-      </Button>
+      </Button> */}
     </>
   )
 }
