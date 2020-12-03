@@ -57,7 +57,7 @@ function CreateMenuHome() {
       ).data.id
       const payload = {
         name: name,
-        url: url,
+        img: url,
         price: value,
         restaurantId: restaurantId
       }
