@@ -20,7 +20,7 @@ export function OrderRoute() {
 function OrderHome() {
   const { data: orderPayload, isLoading } = useAPI('/order/list')
 
-  if (orderPayload)
+  if (!isLoading)
     return (
       <>
         <Container p={0} h={window.innerHeight}>
